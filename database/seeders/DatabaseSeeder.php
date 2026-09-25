@@ -61,23 +61,28 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        UserAddress::create([
-            'user_id' => $customer->id,
-            'label' => 'Rumah',
-            'recipient_name' => 'Bara Ubsi',
-            'phone' => '081234567890',
-            'address_line' => 'Jl. Fatmawati Raya No. 45, RT 02 / RW 05',
-            'province_id' => 6,
-            'province_name' => 'DKI Jakarta',
-            'city_id' => 153,
-            'city_name' => 'Kota Jakarta Selatan',
-            'district_id' => 2108,
-            'district_name' => 'Cilandak',
-            'subdistrict_id' => 210802,
-            'subdistrict_name' => 'Cilandak Barat',
-            'postal_code' => '12430',
-            'is_default' => true,
-        ]);
+        UserAddress::firstOrCreate(
+            ['user_id' => $customer->id, 'label' => 'Rumah'],
+            [
+                'recipient_name' => 'Bara Ubsi',
+                'phone' => '081234567890',
+                'address_line' => 'Jl. Fatmawati Raya No. 45, RT 02 / RW 05',
+                'province_id' => 6,
+                'province_name' => 'DKI Jakarta',
+                'city_id' => 153,
+                'city_name' => 'Kota Jakarta Selatan',
+                'district_id' => 2108,
+                'district_name' => 'Cilandak',
+                'subdistrict_id' => 210802,
+                'subdistrict_name' => 'Cilandak Barat',
+                'postal_code' => '12430',
+                'is_default' => true,
+            ]
+        );
+
+        if (Category::count() > 0) {
+            return;
+        }
 
         $catSemiPermanent = Category::create([
             'name' => 'Semi-Permanent Hair Dye',
