@@ -33,6 +33,6 @@ return [
 
     'kiriminaja' => [
         'api_key' => env('KIRIMINAJA_API_KEY', ''),
-        'mode' => env('KIRIMINAJA_MODE', 'sandbox'),
+        'mode' => env('KIRIMINAJA_MODE', 'staging') === 'production' ? 'production' : 'staging',
     ],
 ];

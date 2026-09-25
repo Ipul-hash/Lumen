@@ -16,7 +16,7 @@ class KiriminAjaService
     public function __construct()
     {
         $this->apiKey = (string) StoreSetting::get('kiriminaja_api_key', env('KIRIMINAJA_API_KEY', ''));
-        $this->mode = (string) StoreSetting::get('kiriminaja_mode', env('KIRIMINAJA_MODE', 'sandbox'));
+        $this->mode = (string) StoreSetting::get('kiriminaja_mode', env('KIRIMINAJA_MODE', 'staging'));
         $this->baseUrl = $this->mode === 'production' 
             ? 'https://client.kiriminaja.com/api/mitra' 
             : 'https://tdev.kiriminaja.com/api/mitra';
