@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache \
     nginx \
@@ -24,11 +24,11 @@ WORKDIR /var/www/html
 
 COPY composer.json composer.lock ./
 
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 COPY . .
 
-RUN composer dump-autoload --optimize --no-dev
+RUN composer dump-autoload --optimize --no-dev --ignore-platform-reqs
 
 RUN npm install && npm run build
 
