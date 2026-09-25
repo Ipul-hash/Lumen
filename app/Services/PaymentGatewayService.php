@@ -143,8 +143,14 @@ class PaymentGatewayService
             ],
         ];
 
+        $webhookUrl = url('/midtrans/webhook');
+
         $response = Http::withoutVerifying()
             ->withBasicAuth($this->serverKey, '')
+            ->withHeaders([
+                'X-Append-Notification' => $webhookUrl,
+                'X-Override-Notification' => $webhookUrl,
+            ])
             ->acceptJson()
             ->post($this->snapApiUrl, $payload);
 
