@@ -22,11 +22,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
+ENV CACHE_STORE=file
+ENV KIRIMINAJA_CACHE_STORE=file
+
 COPY composer.json composer.lock ./
 
 RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 COPY . .
+
+RUN touch database/database.sqlite
 
 RUN composer dump-autoload --optimize --no-dev --ignore-platform-reqs
 
@@ -37,7 +42,7 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 COPY docker/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 EXPOSE 80
 
