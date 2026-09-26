@@ -25,7 +25,7 @@
                     @foreach($categories as $cat)
                         <a href="{{ route('shop.category', $cat->slug) }}" class="text-decoration-none fs-7 py-2 px-2 rounded-2 d-flex justify-content-between align-items-center {{ $cat->id === $category->id ? 'fw-bold text-dark bg-light border-start border-3 border-dark ps-2' : 'text-muted' }}">
                             <span>{{ $cat->name }}</span>
-                            <span class="badge rounded-pill bg-light text-dark border">{{ $cat->products_count ?? $cat->products()->where('is_active', true)->count() }}</span>
+                            <span class="fs-8 text-muted">({{ $cat->products_count ?? $cat->products()->where('is_active', true)->count() }})</span>
                         </a>
                     @endforeach
                 </div>

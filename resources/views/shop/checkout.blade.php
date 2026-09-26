@@ -117,7 +117,6 @@
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="fw-bold fs-7 text-dark text-uppercase">QRIS (Gopay / OVO / Dana / ShopeePay / BCA)</span>
-                                        <span class="badge bg-dark text-white fs-8">Otomatis Terverifikasi</span>
                                     </div>
                                     <p class="fs-8 text-muted mt-1 mb-0">Bayar instan dengan memindai kode QRIS melalui e-wallet atau aplikasi mobile banking favorit Anda.</p>
                                 </div>
@@ -128,7 +127,6 @@
                                 <div class="flex-grow-1">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="fw-bold fs-7 text-dark text-uppercase">Virtual Account Bank</span>
-                                        <span class="badge bg-light text-dark border fs-8">24 Jam</span>
                                     </div>
                                     <p class="fs-8 text-muted mt-1 mb-2">Transfer mudah dari rekening bank tanpa perlu upload bukti pembayaran.</p>
                                     

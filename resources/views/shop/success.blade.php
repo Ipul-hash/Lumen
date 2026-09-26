@@ -10,10 +10,8 @@
                 <div class="symbol symbol-70px mb-3 d-inline-block">
                     <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
                 </div>
-                <div>
-                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 text-uppercase fs-8 fw-bold mb-2 rounded-pill">
-                        Transaksi Sukses
-                    </span>
+                <div class="text-uppercase tracking-wider fs-8 text-success fw-bold mb-2">
+                    Transaksi Sukses
                 </div>
                 <h2 class="display-6 font-serif fw-bold text-dark mb-2">Terima Kasih Atas Pesanan Anda!</h2>
                 <p class="text-muted fs-7 mb-0">Nomor Pesanan: <strong class="text-dark">{{ $order->order_number }}</strong></p>
@@ -22,7 +20,7 @@
             <div class="card border rounded-4 shadow-sm mb-4 overflow-hidden oxva-reveal delay-1">
                 <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
                     <span class="fs-7 text-uppercase fw-bold text-dark">Informasi Pengiriman KiriminAja</span>
-                    <span class="badge bg-light text-dark border rounded-pill fs-8">Status: {{ $order->status_label }}</span>
+                    <span class="fs-8 text-muted">Status: <strong class="text-dark">{{ $order->status_label }}</strong></span>
                 </div>
                 <div class="card-body p-4">
                     @if($order->shipment)
@@ -42,7 +40,7 @@
                                         </button>
                                     </div>
                                 @else
-                                    <span class="badge bg-warning text-dark rounded-pill fs-8">Sedang Diterbitkan Sistem</span>
+                                    <span class="fs-8 text-warning-emphasis fw-semibold">Sedang Diterbitkan Sistem</span>
                                 @endif
                             </div>
                             <div class="col-md-3 text-md-end">

@@ -721,10 +721,10 @@
                 <p class="text-secondary fs-7 pe-lg-4">
                     Formula pewarna rambut inovatif bebas amonia dengan konsentrat Argan Oil & Keratin. Menghasilkan warna intens, kilau multidimensi, serta helai rambut yang tetap sehat dan lembut.
                 </p>
-                <div class="mt-4">
-                    <span class="badge bg-dark border border-secondary text-secondary me-2 p-2">Cruelty Free</span>
-                    <span class="badge bg-dark border border-secondary text-secondary me-2 p-2">Ammonia Free</span>
-                    <span class="badge bg-dark border border-secondary text-secondary p-2">Keratin Infused</span>
+                <div class="mt-4 d-flex flex-wrap gap-2 text-secondary fs-8">
+                    <span class="border border-secondary border-opacity-25 px-2 py-1 rounded-1">Cruelty Free</span>
+                    <span class="border border-secondary border-opacity-25 px-2 py-1 rounded-1">Ammonia Free</span>
+                    <span class="border border-secondary border-opacity-25 px-2 py-1 rounded-1">Keratin Infused</span>
                 </div>
             </div>
 
@@ -752,18 +752,18 @@
                 <h6 class="text-white text-uppercase fs-7 fw-bold mb-3 tracking-wide">Metode Pembayaran & Ekspedisi</h6>
                 <p class="fs-8 text-secondary mb-3">Transaksi terenkripsi otomatis dengan QRIS (Gopay/OVO/Dana/BCA) dan Virtual Account (BCA, Mandiri, BNI, BRI).</p>
                 <div class="d-flex flex-wrap gap-2 mb-4">
-                    <span class="badge bg-white text-dark px-3 py-2 fw-bold">QRIS</span>
-                    <span class="badge bg-white text-dark px-3 py-2 fw-bold">BCA VA</span>
-                    <span class="badge bg-white text-dark px-3 py-2 fw-bold">Mandiri VA</span>
-                    <span class="badge bg-white text-dark px-3 py-2 fw-bold">BNI VA</span>
-                    <span class="badge bg-white text-dark px-3 py-2 fw-bold">BRI VA</span>
+                    <span class="px-2 py-1 bg-white text-dark fw-bold fs-8 rounded-1">QRIS</span>
+                    <span class="px-2 py-1 bg-white text-dark fw-bold fs-8 rounded-1">BCA VA</span>
+                    <span class="px-2 py-1 bg-white text-dark fw-bold fs-8 rounded-1">Mandiri VA</span>
+                    <span class="px-2 py-1 bg-white text-dark fw-bold fs-8 rounded-1">BNI VA</span>
+                    <span class="px-2 py-1 bg-white text-dark fw-bold fs-8 rounded-1">BRI VA</span>
                 </div>
 
                 <div class="fs-8 text-secondary">Didukung oleh Ekspedisi Terpercaya via KiriminAja:</div>
                 <div class="d-flex gap-2 mt-2">
-                    <span class="badge bg-secondary text-white px-2 py-1">J&T Express</span>
-                    <span class="badge bg-secondary text-white px-2 py-1">SiCepat Ekspres</span>
-                    <span class="badge bg-secondary text-white px-2 py-1">JNE Express</span>
+                    <span class="px-2 py-1 border border-secondary border-opacity-25 text-white-50 fs-8 rounded-1">J&T Express</span>
+                    <span class="px-2 py-1 border border-secondary border-opacity-25 text-white-50 fs-8 rounded-1">SiCepat Ekspres</span>
+                    <span class="px-2 py-1 border border-secondary border-opacity-25 text-white-50 fs-8 rounded-1">JNE Express</span>
                 </div>
             </div>
         </div>

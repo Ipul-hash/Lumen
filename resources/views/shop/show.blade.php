@@ -52,9 +52,9 @@
         <div class="col-lg-6">
             <div>
                 @if($product->category)
-                    <span class="badge bg-light text-dark border text-uppercase tracking-wider px-2 py-1 fs-8 fw-semibold mb-2">
+                    <div class="text-uppercase tracking-wider fs-8 text-muted fw-bold mb-2">
                         {{ $product->category->name }}
-                    </span>
+                    </div>
                 @endif
 
                 <h1 class="font-serif fw-bold text-dark display-6 mb-2">{{ $product->name }}</h1>
@@ -123,12 +123,9 @@
 
                 <div class="card bg-light border-0 mb-4 rounded-4 shadow-sm">
                     <div class="card-body p-4">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <i class="bi bi-truck fs-4 text-dark"></i>
-                                <span class="fw-bold fs-7 text-uppercase">Cek Tarif Ekspedisi KiriminAja</span>
-                            </div>
-                            <span class="badge bg-white text-dark border rounded-pill fs-8">Real-time API</span>
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-truck fs-4 text-dark"></i>
+                            <span class="fw-bold fs-7 text-uppercase">Cek Tarif Ekspedisi KiriminAja</span>
                         </div>
                         <p class="fs-8 text-muted mb-3">Estimasi ongkos kirim dari Gudang Pusat Kebayoran Baru, Jakarta Selatan ke lokasi Anda.</p>
                         

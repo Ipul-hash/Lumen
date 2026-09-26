@@ -26,7 +26,7 @@
                     <div class="flex-grow-1">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                             <h6 class="fw-bold mb-0 text-dark">Level 1 - 2: Jet Black & Darkest Brown</h6>
-                            <span class="badge bg-dark rounded-pill fs-8">Dasar Rambut Asia Alami</span>
+                            <span class="fs-8 text-muted fw-semibold">Dasar Rambut Asia Alami</span>
                         </div>
                         <p class="fs-8 text-muted mb-0 mt-1">Mengandung konsentrasi eumelanin (pigmen hitam/cokelat) sangat padat. Memerlukan bleaching untuk warna terang.</p>
                     </div>
@@ -37,7 +37,7 @@
                     <div class="flex-grow-1">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                             <h6 class="fw-bold mb-0 text-dark">Level 3 - 4: Dark Brown & Medium Brown</h6>
-                            <span class="badge bg-secondary rounded-pill fs-8">Warna Cokelat Alami</span>
+                            <span class="fs-8 text-muted fw-semibold">Warna Cokelat Alami</span>
                         </div>
                         <p class="fs-8 text-muted mb-0 mt-1">Sangat cocok untuk varian warna Burgundy, Espresso Rich, dan Mahogany tanpa bleaching berlebih.</p>
                     </div>
@@ -48,7 +48,7 @@
                     <div class="flex-grow-1">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                             <h6 class="fw-bold mb-0 text-dark">Level 5 - 6: Light Brown & Dark Blonde</h6>
-                            <span class="badge bg-warning bg-opacity-25 text-dark rounded-pill fs-8">Undercoat Merah-Oranye</span>
+                            <span class="fs-8 text-muted fw-semibold">Undercoat Merah-Oranye</span>
                         </div>
                         <p class="fs-8 text-muted mb-0 mt-1">Ideal untuk warna Caramel, Copper Brown, dan Chestnut.</p>
                     </div>
@@ -59,7 +59,7 @@
                     <div class="flex-grow-1">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                             <h6 class="fw-bold mb-0 text-dark">Level 7 - 8: Medium Blonde & Light Blonde</h6>
-                            <span class="badge bg-warning text-dark rounded-pill fs-8">Undercoat Kuning Emas</span>
+                            <span class="fs-8 text-muted fw-semibold">Undercoat Kuning Emas</span>
                         </div>
                         <p class="fs-8 text-muted mb-0 mt-1">Kanvas sempurna untuk Rose Gold, Lilac, Milk Tea, dan Honey Blonde.</p>
                     </div>
@@ -70,7 +70,7 @@
                     <div class="flex-grow-1">
                         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
                             <h6 class="fw-bold mb-0 text-dark">Level 9 - 10: Very Light & Pale Platinum Blonde</h6>
-                            <span class="badge bg-info bg-opacity-25 text-info-emphasis rounded-pill fs-8">Undercoat Kuning Pucat / Putih</span>
+                            <span class="fs-8 text-muted fw-semibold">Undercoat Kuning Pucat / Putih</span>
                         </div>
                         <p class="fs-8 text-muted mb-0 mt-1">Wajib dicapai untuk varian warna <strong>Nordic Ash Grey</strong>, Silver Chrome, dan Pastel.</p>
                     </div>

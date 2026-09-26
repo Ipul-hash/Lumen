@@ -21,19 +21,18 @@
                         Panduan Level Bleaching
                     </a>
                 </div>
-                <div class="mt-4 pt-3 d-flex flex-wrap align-items-center gap-3 fs-8 text-white-50">
-                    <span class="d-inline-flex align-items-center gap-1"><i class="bi bi-check2-circle text-info"></i> Tanpa Amonia</span>
-                    <span class="d-inline-flex align-items-center gap-1"><i class="bi bi-shield-check text-info"></i> KiriminAja Auto-AWB</span>
-                    <span class="d-inline-flex align-items-center gap-1"><i class="bi bi-qr-code text-info"></i> QRIS & VA Otomatis</span>
+                <div class="mt-4 pt-3 d-flex flex-wrap align-items-center gap-4 fs-8 text-white-50">
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2 text-light opacity-50"></i> Tanpa Amonia</span>
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2 text-light opacity-50"></i> Salon Grade Formula</span>
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2 text-light opacity-50"></i> Keratin & Argan Infused</span>
                 </div>
             </div>
             <div class="col-lg-5 text-center">
                 <div class="position-relative d-inline-block oxva-reveal oxva-reveal-scale delay-2">
                     <div class="hero-ambient-glow"></div>
                     <div class="hero-feature-card text-start" style="width: 340px; max-width: 100%;">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="mb-3">
                             <span class="text-uppercase tracking-widest text-white-50 fs-8 fw-bold">Color of the Season</span>
-                            <span class="badge rounded-pill bg-light text-dark fw-bold fs-8">Level 9+</span>
                         </div>
                         <h3 class="text-white font-serif mb-1 fs-4">Nordic Ash Grey</h3>
                         <p class="fs-8 text-white-50 mb-3">Formula dingin berpigmen ultra-halus untuk menetralkan pantulan kekuningan rambut Asia.</p>
@@ -41,7 +40,6 @@
                             <span class="swatch-circle" style="background-color: #8C8D91; width:26px; height:26px;"></span>
                             <span class="swatch-circle" style="background-color: #C0C0C0; width:26px; height:26px;"></span>
                             <span class="swatch-circle" style="background-color: #5C5D61; width:26px; height:26px;"></span>
-                            <span class="fs-8 text-white-50 ms-auto">Micro-Pigment Trio</span>
                         </div>
                         <a href="{{ route('shop.show', 'lumen-vivid-color-cream-120ml') }}" class="btn btn-outline-light rounded-pill w-100 py-2 fs-8 fw-bold">
                             Lihat Detail Shade Ini <i class="bi bi-chevron-right ms-1"></i>
@@ -139,22 +137,22 @@
                             </div>
                         @endif
 
-                        @if($product->category)
-                            <span class="product-badge-luxury">
-                                {{ $product->category->name }}
-                            </span>
-                        @endif
                     </div>
 
                     <div class="flex-grow-1 d-flex flex-column">
-                        <div class="d-flex align-items-center gap-1 mb-2">
-                            @foreach($product->activeVariants->take(5) as $v)
-                                @if($v->color_code)
-                                    <span class="swatch-circle" style="background-color: {{ $v->color_code }};" title="{{ $v->color_name }}"></span>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center gap-1">
+                                @foreach($product->activeVariants->take(5) as $v)
+                                    @if($v->color_code)
+                                        <span class="swatch-circle" style="background-color: {{ $v->color_code }};" title="{{ $v->color_name }}"></span>
+                                    @endif
+                                @endforeach
+                                @if($product->activeVariants->count() > 5)
+                                    <span class="fs-8 text-muted ms-1">+{{ $product->activeVariants->count() - 5 }}</span>
                                 @endif
-                            @endforeach
-                            @if($product->activeVariants->count() > 5)
-                                <span class="fs-8 text-muted ms-1">+{{ $product->activeVariants->count() - 5 }}</span>
+                            </div>
+                            @if($product->category)
+                                <span class="fs-8 text-muted text-uppercase fw-semibold tracking-wide">{{ $product->category->name }}</span>
                             @endif
                         </div>
 
@@ -230,9 +228,8 @@
             </div>
             <div class="col-lg-6 oxva-reveal oxva-reveal-right delay-2">
                 <div class="atelier-guide-card">
-                    <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="mb-3">
                         <h5 class="font-serif fw-bold text-white mb-0 fs-5">Panduan Singkat Level Rambut</h5>
-                        <span class="badge rounded-pill bg-white text-dark fw-bold fs-8">Atelier Chart</span>
                     </div>
                     <p class="fs-8 text-white-50 mb-4">Pahami kanvas dasar helai rambut Anda sebelum mengaplikasikan formula tone impian.</p>
                     <div class="d-flex flex-column mb-4">
@@ -241,28 +238,28 @@
                                 <span style="width: 14px; height: 14px; border-radius: 50%; background: #111; border: 1px solid #444; display: inline-block;"></span>
                                 <span class="fs-8 fw-bold text-white">Level 1 - 3: Hitam / Dark Brown</span>
                             </div>
-                            <span class="badge bg-secondary rounded-pill fs-8">Perlu Bleach ke Lvl 8+</span>
+                            <span class="fs-8 text-white-50">Perlu Bleach ke Lvl 8+</span>
                         </div>
                         <div class="level-row-item" style="background: rgba(99, 63, 39, 0.45);">
                             <div class="d-flex align-items-center gap-2">
                                 <span style="width: 14px; height: 14px; border-radius: 50%; background: #633f27; display: inline-block;"></span>
                                 <span class="fs-8 fw-bold text-white">Level 4 - 6: Medium Brown</span>
                             </div>
-                            <span class="badge bg-secondary rounded-pill fs-8">Burgundy & Warm Brown</span>
+                            <span class="fs-8 text-white-50">Burgundy & Warm Brown</span>
                         </div>
                         <div class="level-row-item" style="background: rgba(216, 176, 86, 0.25);">
                             <div class="d-flex align-items-center gap-2">
                                 <span style="width: 14px; height: 14px; border-radius: 50%; background: #d8b056; display: inline-block;"></span>
                                 <span class="fs-8 fw-bold text-white">Level 7 - 8: Golden Blonde</span>
                             </div>
-                            <span class="badge bg-light text-dark rounded-pill fs-8 fw-bold">Rose Gold & Milk Tea</span>
+                            <span class="fs-8 text-white-50">Rose Gold & Milk Tea</span>
                         </div>
                         <div class="level-row-item" style="background: rgba(247, 237, 212, 0.2);">
                             <div class="d-flex align-items-center gap-2">
                                 <span style="width: 14px; height: 14px; border-radius: 50%; background: #f7edd4; display: inline-block;"></span>
                                 <span class="fs-8 fw-bold text-white">Level 9 - 10: Pale Platinum</span>
                             </div>
-                            <span class="badge bg-light text-dark rounded-pill fs-8 fw-bold">Nordic Ash Grey</span>
+                            <span class="fs-8 text-white-50">Nordic Ash Grey</span>
                         </div>
                     </div>
                     <a href="{{ route('shop.shadeGuide') }}" class="btn btn-outline-light rounded-pill w-100 py-2 fs-8 fw-semibold">
@@ -283,12 +280,6 @@
                 <p class="fs-6 text-light opacity-75 mx-auto mb-4" style="max-width: 680px; line-height: 1.6;">
                     Pesanan Anda langsung diteruskan ke kurir pilihan (J&T Express, SiCepat, JNE) dengan penjemputan berkala dari warehouse Jakarta Selatan. Anda dapat memantau pergerakan paket secara real-time kapan saja.
                 </p>
-                <div class="d-flex flex-wrap justify-content-center gap-2 mb-4">
-                    <span class="badge rounded-pill px-3 py-2" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff;">J&T Express</span>
-                    <span class="badge rounded-pill px-3 py-2" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff;">SiCepat REG / BEST</span>
-                    <span class="badge rounded-pill px-3 py-2" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff;">JNE Regular / YES</span>
-                    <span class="badge rounded-pill px-3 py-2" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff;">Automated AWB</span>
-                </div>
                 <div class="d-flex justify-content-center gap-3">
                     <a href="{{ route('shop.track') }}" class="oxva-btn-primary">
                         <i class="bi bi-search me-1"></i> Lacak Status Pesanan

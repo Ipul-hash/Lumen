@@ -6,9 +6,9 @@
 <div class="bg-light py-4 border-bottom">
     <div class="container-fluid px-lg-5">
         <div class="text-center mw-600px mx-auto">
-            <span class="badge bg-warning bg-opacity-25 text-warning-emphasis border border-warning px-3 py-2 text-uppercase fs-8 fw-bold mb-2">
+            <div class="text-uppercase tracking-wider fs-8 text-warning-emphasis fw-bold mb-2">
                 Menunggu Pembayaran
-            </span>
+            </div>
             <h2 class="font-serif fw-bold text-dark mb-1">Selesaikan Pembayaran Anda</h2>
             <p class="text-muted fs-7 mb-0">Nomor Pesanan: <strong>{{ $order->order_number }}</strong></p>
         </div>
