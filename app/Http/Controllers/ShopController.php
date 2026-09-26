@@ -23,7 +23,7 @@ class ShopController extends Controller
             ->latest()
             ->get();
 
-        return view('shop.index', compact('categories', 'featuredProducts', 'allProducts'));
+        return view('shop.index', compact('categories', 'featuredProducts'));
     }
 
     public function category(Category $category)
