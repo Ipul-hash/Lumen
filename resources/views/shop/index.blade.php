@@ -110,8 +110,11 @@
                 <h2 class="font-serif fw-bold text-dark mt-0 mb-0 display-6">Koleksi Warna Unggulan</h2>
             </div>
             <div class="mt-3 mt-md-0 d-flex gap-2">
-                <a href="{{ route('shop.shadeGuide') }}" class="btn btn-sm btn-outline-dark rounded-pill px-4 py-2 fw-semibold fs-8">
-                    <i class="bi bi-palette me-1"></i> Buka Color Chart
+                <a href="{{ route('shop.formulaCalculator') }}" class="btn btn-sm btn-dark rounded-pill px-3 py-2 fw-semibold fs-8">
+                    <i class="bi bi-magic text-warning me-1"></i> Formula Mixer
+                </a>
+                <a href="{{ route('shop.shadeGuide') }}" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-2 fw-semibold fs-8">
+                    <i class="bi bi-palette me-1"></i> Color Chart
                 </a>
             </div>
         </div>
@@ -244,9 +247,14 @@
                         </div>
                     </div>
                 </div>
-                <a href="{{ route('shop.category', 'bleaching-developers') }}" class="btn btn-brand-dark rounded-pill px-4 py-3">
-                    Lihat Koleksi Bleach & Developer <i class="bi bi-arrow-right ms-1"></i>
-                </a>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ route('shop.category', 'bleaching-developers') }}" class="btn btn-brand-dark rounded-pill px-4 py-3">
+                        Lihat Koleksi Bleach & Developer <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                    <a href="{{ route('shop.formulaCalculator') }}" class="btn btn-outline-dark rounded-pill px-4 py-3">
+                        <i class="bi bi-magic text-warning me-1"></i> Racik Formula Mandiri
+                    </a>
+                </div>
             </div>
             <div class="col-lg-6 oxva-reveal oxva-reveal-right delay-2">
                 <div class="atelier-guide-card">

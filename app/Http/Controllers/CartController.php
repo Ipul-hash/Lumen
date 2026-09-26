@@ -89,6 +89,33 @@ class CartController extends Controller
         ]);
     }
 
+    public function addBundle(Request $request, CartService $cartService)
+    {
+        $validated = $request->validate([
+            'items' => 'required|array|min:1',
+            'items.*.variant_id' => 'required|exists:product_variants,id',
+            'items.*.quantity' => 'required|integer|min:1|max:20',
+        ]);
+
+        $cart = $cartService->getOrCreateCart($request);
+        $addedCount = 0;
+
+        foreach ($validated['items'] as $item) {
+            $variant = ProductVariant::find($item['variant_id']);
+            if ($variant && $variant->stock >= $item['quantity']) {
+                $cartService->addItem($cart, $variant->id, (int)$item['quantity']);
+                $addedCount++;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Paket racikan formula salon berhasil ditambahkan ke keranjang!',
+            'added_count' => $addedCount,
+            'total_items' => $cart->fresh()->total_items,
+        ]);
+    }
+
     public function update(Request $request, $itemId, CartService $cartService)
     {
         $validated = $request->validate([

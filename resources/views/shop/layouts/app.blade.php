@@ -647,6 +647,9 @@
                         <a href="{{ route('shop.category', 'bleaching-developers') }}" class="nav-link">Bleach & Developers</a>
                         <a href="{{ route('shop.category', 'color-care-treatment') }}" class="nav-link">Color Care</a>
                         <a href="{{ route('shop.shadeGuide') }}" class="nav-link">Panduan Shade</a>
+                        <a href="{{ route('shop.formulaCalculator') }}" class="nav-link fw-semibold text-dark">
+                            <i class="bi bi-magic text-warning me-1"></i>Formula Mixer
+                        </a>
                         <a href="{{ route('shop.track') }}" class="nav-link">Lacak Resi</a>
                     </nav>
                 </div>
@@ -685,6 +688,9 @@
             <a href="{{ route('shop.category', 'bleaching-developers') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Bleach & Developers</a>
             <a href="{{ route('shop.category', 'color-care-treatment') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Color Care</a>
             <a href="{{ route('shop.shadeGuide') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Panduan Shade</a>
+            <a href="{{ route('shop.formulaCalculator') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider text-dark">
+                <i class="bi bi-magic text-warning me-2"></i> Formula Mixer Calculator
+            </a>
             <a href="{{ route('shop.track') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">
                 <i class="bi bi-geo-alt me-2 text-primary"></i> Lacak Resi Pengiriman
             </a>
@@ -788,6 +794,7 @@
             <div class="col-6 col-lg-2">
                 <h6 class="text-white text-uppercase fs-7 fw-bold mb-3 tracking-wide">Bantuan & Logistik</h6>
                 <ul class="list-unstyled fs-7 d-flex flex-column gap-2">
+                    <li><a href="{{ route('shop.formulaCalculator') }}">Kalkulator Formula Mixer</a></li>
                     <li><a href="{{ route('shop.track') }}">Lacak Pengiriman KiriminAja</a></li>
                     <li><a href="{{ route('shop.shadeGuide') }}">Cara Memilih Developer</a></li>
                     <li><a href="{{ route('shop.shadeGuide') }}">Panduan Tes Alergi Kulit</a></li>
