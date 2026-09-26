@@ -5,10 +5,6 @@
 @section('content')
 <div class="bg-dark text-white py-5 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #09090d 0%, #15141d 50%, #060608 100%);">
     <div class="container px-lg-5 position-relative" style="z-index: 1;">
-        <span class="oxva-badge mb-3">
-            <span style="width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; display: inline-block; box-shadow: 0 0 10px #38bdf8;"></span>
-            Real-Time Logistics Tracking
-        </span>
         <h1 class="display-6 font-serif fw-bold text-white mb-2">Lacak Status Paket & Resi Pengiriman</h1>
         <p class="text-light opacity-75 fs-7 mx-auto mb-4" style="max-width: 600px;">
             Masukkan Nomor Invoice Pesanan (contoh: <code>INV-2026...</code>) atau Nomor Resi AWB KiriminAja untuk melihat posisi kurir saat ini.

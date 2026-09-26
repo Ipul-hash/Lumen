@@ -7,10 +7,6 @@
     <div class="container-fluid px-lg-5 position-relative" style="z-index: 1;">
         <div class="row align-items-center g-5">
             <div class="col-lg-7 oxva-reveal">
-                <span class="oxva-badge mb-3">
-                    <span style="width: 7px; height: 7px; border-radius: 50%; background: #38bdf8; display: inline-block; box-shadow: 0 0 10px #38bdf8;"></span>
-                    Salon-Grade Formulation at Home
-                </span>
                 <h1 class="display-3 fw-bold text-white mb-3 font-serif" style="letter-spacing: -0.02em; line-height: 1.1;">
                     ELEVATE YOUR <span class="oxva-text-gradient">TONE.</span>
                 </h1>
@@ -36,7 +32,7 @@
                     <div class="hero-ambient-glow"></div>
                     <div class="hero-feature-card text-start" style="width: 340px; max-width: 100%;">
                         <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="oxva-badge" style="font-size: 0.65rem; padding: 4px 12px; background: rgba(255,255,255,0.1);">Color of the Season</span>
+                            <span class="text-uppercase tracking-widest text-white-50 fs-8 fw-bold">Color of the Season</span>
                             <span class="badge rounded-pill bg-light text-dark fw-bold fs-8">Level 9+</span>
                         </div>
                         <h3 class="text-white font-serif mb-1 fs-4">Nordic Ash Grey</h3>
@@ -204,7 +200,6 @@
     <div class="container-fluid px-lg-5">
         <div class="row align-items-center g-5">
             <div class="col-lg-6 oxva-reveal oxva-reveal-left">
-                <span class="badge bg-dark text-white text-uppercase tracking-wider px-3 py-2 mb-3 fw-bold fs-8 rounded-pill">Sistem Pewarnaan Sempurna</span>
                 <h2 class="display-5 font-serif fw-bold text-dark mb-3">Bleaching & Pre-Lightening Kit</h2>
                 <p class="text-muted fs-6 mb-4 pe-lg-4" style="line-height: 1.6;">
                     Untuk mencapai warna ash, pastel, atau tone terang impian, rambut memerlukan dasar bleaching yang bersih dan merata. LUMEN Pro-Bleach Powder diformulasikan dengan anti-brass violet agent yang menahan pigmen kuning kemerahan sejak menit pertama.
@@ -284,11 +279,7 @@
         <div class="logistics-card text-white text-center oxva-reveal oxva-reveal-scale">
             <div style="position: absolute; top: -100px; left: 50%; transform: translateX(-50%); width: 600px; height: 300px; background: radial-gradient(ellipse, rgba(56, 189, 248, 0.15) 0%, rgba(168, 85, 247, 0.12) 40%, transparent 70%); pointer-events: none;"></div>
             <div class="position-relative" style="z-index: 1;">
-                <span class="oxva-badge mb-3">
-                    <i class="bi bi-lightning-charge-fill text-warning"></i>
-                    Pengiriman Kilat & Terpantau
-                </span>
-                <h2 class="display-6 font-serif fw-bold text-white mt-2 mb-3">Kemitraan Logistik Otomatis dengan KiriminAja</h2>
+                <h2 class="display-6 font-serif fw-bold text-white mb-3">Kemitraan Logistik Otomatis dengan KiriminAja</h2>
                 <p class="fs-6 text-light opacity-75 mx-auto mb-4" style="max-width: 680px; line-height: 1.6;">
                     Pesanan Anda langsung diteruskan ke kurir pilihan (J&T Express, SiCepat, JNE) dengan penjemputan berkala dari warehouse Jakarta Selatan. Anda dapat memantau pergerakan paket secara real-time kapan saja.
                 </p>

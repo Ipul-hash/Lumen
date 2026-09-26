@@ -5,7 +5,6 @@
 @section('content')
 <div class="bg-dark text-white py-5 text-center position-relative overflow-hidden" style="background: linear-gradient(135deg, #09090d 0%, #15141d 50%, #060608 100%);">
     <div class="container px-lg-5 position-relative" style="z-index: 1;">
-        <span class="oxva-badge mb-3">Atelier Color Theory</span>
         <h1 class="display-5 font-serif fw-bold mb-2">Panduan Level Bleaching & Shade Finder</h1>
         <p class="text-light opacity-75 fs-6 mx-auto mb-0" style="max-width: 650px;">
             Dapatkan hasil warna rambut yang presisi seperti di salon profesional dengan memahami level warna dasar rambut Anda.
