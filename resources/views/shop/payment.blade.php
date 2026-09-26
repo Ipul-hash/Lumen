@@ -18,19 +18,19 @@
 <div class="container px-lg-5 py-5">
     <div class="row justify-content-center">
         <div class="col-lg-7">
-            <div class="card border rounded-0 shadow-sm mb-4">
+            <div class="card border rounded-4 shadow-sm mb-4 overflow-hidden">
                 <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
                     <span class="fs-7 text-uppercase fw-bold text-muted">Batas Waktu Pembayaran</span>
-                    <span class="badge bg-danger text-white fs-7 px-3 py-2 fw-bold" id="countdownTimer">29:59</span>
+                    <span class="badge bg-danger text-white rounded-pill fs-7 px-3 py-2 fw-bold" id="countdownTimer">29:59</span>
                 </div>
 
                 <div class="card-body p-4 p-md-5">
                     @if(!empty($snapToken))
-                    <div class="p-3 bg-light border border-dark border-opacity-10 text-center mb-4">
+                    <div class="p-4 bg-light border border-dark border-opacity-10 text-center mb-4 rounded-4 shadow-sm">
                         <span class="fs-8 text-muted text-uppercase fw-bold d-block mb-1">Metode Cepat & Otomatis</span>
                         <h5 class="fw-bold text-dark mb-2">Bayar Langsung via Midtrans Gateway</h5>
                         <p class="fs-8 text-muted mb-3">Mendukung GoPay, ShopeePay, OVO, DANA, QRIS, BCA/Mandiri/BNI/BRI VA, serta Kartu Kredit.</p>
-                        <button type="button" id="pay-button" class="btn btn-dark w-100 py-3 rounded-0 fw-bold fs-7 shadow-sm text-uppercase">
+                        <button type="button" id="pay-button" class="btn btn-dark w-100 py-3 rounded-pill fw-bold fs-7 shadow-sm text-uppercase">
                             <i class="bi bi-wallet2 me-2 text-warning"></i> Buka Pembayaran Midtrans Snap
                         </button>
                     </div>
@@ -130,11 +130,11 @@
                         </div>
                     @endif
 
-                    <div class="p-3 bg-light border border-info border-opacity-50 text-center mb-4">
+                    <div class="p-3 bg-light border border-info border-opacity-50 text-center mb-4 rounded-3">
                         <div class="fs-8 text-muted mb-2">Simulasi Pengujian Client: Klik tombol di bawah untuk menyimulasikan pembayaran yang berhasil terverifikasi otomatis.</div>
                         <form action="{{ route('payments.simulateSuccess', $payment->id) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-success btn-sm rounded-0 px-4 py-2 fw-bold text-uppercase fs-8">
+                            <button type="submit" class="btn btn-success btn-sm rounded-pill px-4 py-2 fw-bold text-uppercase fs-8">
                                 <i class="bi bi-check2-circle me-1"></i> Simulasikan Pembayaran Lunas (Instant Settlement)
                             </button>
                         </form>

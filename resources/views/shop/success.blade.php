@@ -6,25 +6,27 @@
 <div class="container px-lg-5 py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="text-center mb-5">
+            <div class="text-center mb-5 oxva-reveal">
                 <div class="symbol symbol-70px mb-3 d-inline-block">
                     <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
                 </div>
-                <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 text-uppercase fs-8 fw-bold mb-2">
-                    Transaksi Sukses
-                </span>
+                <div>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-3 py-2 text-uppercase fs-8 fw-bold mb-2 rounded-pill">
+                        Transaksi Sukses
+                    </span>
+                </div>
                 <h2 class="display-6 font-serif fw-bold text-dark mb-2">Terima Kasih Atas Pesanan Anda!</h2>
                 <p class="text-muted fs-7 mb-0">Nomor Pesanan: <strong class="text-dark">{{ $order->order_number }}</strong></p>
             </div>
 
-            <div class="card border rounded-0 shadow-sm mb-4">
+            <div class="card border rounded-4 shadow-sm mb-4 overflow-hidden oxva-reveal delay-1">
                 <div class="card-header bg-white py-3 border-bottom d-flex align-items-center justify-content-between">
                     <span class="fs-7 text-uppercase fw-bold text-dark">Informasi Pengiriman KiriminAja</span>
-                    <span class="badge bg-light text-dark border fs-8">Status: {{ $order->status_label }}</span>
+                    <span class="badge bg-light text-dark border rounded-pill fs-8">Status: {{ $order->status_label }}</span>
                 </div>
                 <div class="card-body p-4">
                     @if($order->shipment)
-                    <div class="p-3 bg-light border mb-4">
+                    <div class="p-3 bg-light border rounded-3 mb-4">
                         <div class="row g-3 align-items-center">
                             <div class="col-md-4">
                                 <span class="fs-8 text-muted d-block text-uppercase fw-bold">Ekspedisi Pilihan</span>
@@ -40,11 +42,11 @@
                                         </button>
                                     </div>
                                 @else
-                                    <span class="badge bg-warning text-dark fs-8">Sedang Diterbitkan Sistem</span>
+                                    <span class="badge bg-warning text-dark rounded-pill fs-8">Sedang Diterbitkan Sistem</span>
                                 @endif
                             </div>
                             <div class="col-md-3 text-md-end">
-                                <a href="{{ route('shop.track', ['q' => $order->order_number]) }}" class="btn btn-sm btn-dark rounded-0 px-3">
+                                <a href="{{ route('shop.track', ['q' => $order->order_number]) }}" class="btn btn-sm btn-dark rounded-pill px-3">
                                     <i class="bi bi-geo-alt me-1"></i> Lacak Paket
                                 </a>
                             </div>
@@ -116,11 +118,11 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white border-top p-4 d-flex flex-wrap gap-2 justify-content-between align-items-center">
-                    <a href="{{ route('admin.orders.invoice', $order->id) }}" target="_blank" class="btn btn-outline-dark btn-sm rounded-0">
+                    <a href="{{ route('admin.orders.invoice', $order->id) }}" target="_blank" class="btn btn-outline-dark btn-sm rounded-pill px-3">
                         <i class="bi bi-printer me-1"></i> Cetak Invoice
                     </a>
-                    <a href="{{ route('shop.index') }}" class="btn btn-brand-dark btn-sm">
-                        Lanjut Belanja di LUMEN
+                    <a href="{{ route('shop.index') }}" class="btn btn-brand-dark btn-sm rounded-pill px-4">
+                        Lanjut Belanja di LUMEN <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>
             </div>

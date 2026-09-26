@@ -21,7 +21,7 @@
     <div class="row g-5">
         <div class="col-lg-6">
             <div class="position-sticky" style="top: 100px;">
-                <div class="border bg-light text-center mb-3" style="aspect-ratio: 1/1.1; overflow: hidden; display: flex; align-items: center; justify-content: center;" id="mainImageContainer">
+                <div class="border bg-light text-center mb-3 rounded-4 shadow-sm overflow-hidden" style="aspect-ratio: 1/1.1; display: flex; align-items: center; justify-content: center;" id="mainImageContainer">
                     @php
                         $firstVariant = $product->activeVariants->first();
                         $hasColorCode = $firstVariant && $firstVariant->color_code;
@@ -40,7 +40,7 @@
                 @if($product->images->count() > 1)
                 <div class="d-flex gap-2 overflow-auto pb-2">
                     @foreach($product->images as $img)
-                        <div class="border" style="width: 70px; height: 70px; cursor: pointer; flex-shrink: 0;" onclick="document.getElementById('mainProductImage').src='{{ str_starts_with($img->image_path, 'http') ? $img->image_path : asset('storage/' . $img->image_path) }}'">
+                        <div class="border rounded-3 overflow-hidden shadow-sm" style="width: 70px; height: 70px; cursor: pointer; flex-shrink: 0;" onclick="document.getElementById('mainProductImage').src='{{ str_starts_with($img->image_path, 'http') ? $img->image_path : asset('storage/' . $img->image_path) }}'">
                             <img src="{{ str_starts_with($img->image_path, 'http') ? $img->image_path : asset('storage/' . $img->image_path) }}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     @endforeach
@@ -112,29 +112,29 @@
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row gap-3">
-                        <button type="button" class="btn btn-brand-dark flex-grow-1 py-3" id="btnAddToCart">
+                        <button type="button" class="btn btn-brand-dark rounded-pill flex-grow-1 py-3" id="btnAddToCart">
                             <i class="bi bi-bag-plus me-2"></i> Tambah ke Tas Belanja
                         </button>
-                        <button type="button" class="btn btn-brand-outline flex-grow-1 py-3" id="btnBuyNow">
+                        <button type="button" class="btn btn-brand-outline rounded-pill flex-grow-1 py-3" id="btnBuyNow">
                             Beli Sekarang
                         </button>
                     </div>
                 </div>
 
-                <div class="card bg-light border-0 mb-4">
+                <div class="card bg-light border-0 mb-4 rounded-4 shadow-sm">
                     <div class="card-body p-4">
                         <div class="d-flex align-items-center justify-content-between mb-3">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="bi bi-truck fs-4 text-dark"></i>
                                 <span class="fw-bold fs-7 text-uppercase">Cek Tarif Ekspedisi KiriminAja</span>
                             </div>
-                            <span class="badge bg-white text-dark border fs-8">Real-time API</span>
+                            <span class="badge bg-white text-dark border rounded-pill fs-8">Real-time API</span>
                         </div>
                         <p class="fs-8 text-muted mb-3">Estimasi ongkos kirim dari Gudang Pusat Kebayoran Baru, Jakarta Selatan ke lokasi Anda.</p>
                         
                         <div class="row g-2">
                             <div class="col-8">
-                                <select id="shippingDestSelect" class="form-select form-select-sm rounded-0">
+                                <select id="shippingDestSelect" class="form-select form-select-sm rounded-pill px-3">
                                     <option value="2108">Tebet, Kota Jakarta Selatan</option>
                                     <option value="2110">Gambir, Kota Jakarta Pusat</option>
                                     <option value="2189">Bekasi Barat, Kota Bekasi</option>
@@ -148,7 +148,7 @@
                                 </select>
                             </div>
                             <div class="col-4">
-                                <button type="button" id="btnCheckPdpShipping" class="btn btn-sm btn-dark rounded-0 w-100">
+                                <button type="button" id="btnCheckPdpShipping" class="btn btn-sm btn-dark rounded-pill w-100">
                                     Cek Tarif
                                 </button>
                             </div>
@@ -217,12 +217,12 @@
 
     @if($relatedProducts->count() > 0)
     <div class="mt-5 pt-5 border-top">
-        <h3 class="font-serif fw-bold text-dark mb-4">Lengkapi Perawatan Rambut Anda</h3>
+        <h3 class="font-serif fw-bold text-dark mb-4 oxva-reveal">Lengkapi Perawatan Rambut Anda</h3>
         <div class="row g-4">
             @foreach($relatedProducts as $rel)
-            <div class="col-6 col-md-3">
+            <div class="col-6 col-md-3 oxva-reveal delay-{{ ($loop->index % 4) + 1 }}">
                 <div class="product-card">
-                    <div class="img-wrapper mb-2">
+                    <div class="img-wrapper">
                         @if($rel->primaryImage)
                             <img src="{{ str_starts_with($rel->primaryImage->image_path, 'http') ? $rel->primaryImage->image_path : asset('storage/' . $rel->primaryImage->image_path) }}" alt="{{ $rel->name }}">
                         @else
@@ -231,12 +231,17 @@
                             </div>
                         @endif
                     </div>
-                    <h6 class="fs-7 fw-bold mb-1">
-                        <a href="{{ route('shop.show', $rel->slug) }}" class="text-dark text-decoration-none">
-                            {{ $rel->name }}
+                    <div class="flex-grow-1 d-flex flex-column">
+                        <h6 class="fs-7 fw-bold mb-1">
+                            <a href="{{ route('shop.show', $rel->slug) }}" class="text-dark text-decoration-none">
+                                {{ $rel->name }}
+                            </a>
+                        </h6>
+                        <div class="fs-7 fw-bolder text-dark mb-3">{{ $rel->formatted_price }}</div>
+                        <a href="{{ route('shop.show', $rel->slug) }}" class="btn-card-action-outline mt-auto text-center w-100">
+                            Lihat Detail
                         </a>
-                    </h6>
-                    <div class="fs-7 fw-semibold text-dark">{{ $rel->formatted_price }}</div>
+                    </div>
                 </div>
             </div>
             @endforeach

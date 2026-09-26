@@ -21,7 +21,7 @@
         <div class="row g-5">
             <div class="col-lg-7">
                 <div class="d-flex flex-column gap-5">
-                    <div class="p-4 border bg-white">
+                    <div class="p-4 border bg-white rounded-4 shadow-sm">
                         <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
                             <span class="badge bg-dark text-white rounded-circle p-2" style="width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center;">1</span>
                             <h5 class="font-serif fw-bold text-dark m-0">Informasi Kontak Pemesan</h5>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div class="p-4 border bg-white">
+                    <div class="p-4 border bg-white rounded-4 shadow-sm">
                         <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
                             <span class="badge bg-dark text-white rounded-circle p-2" style="width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center;">2</span>
                             <h5 class="font-serif fw-bold text-dark m-0">Alamat Tujuan Pengiriman</h5>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
 
-                    <div class="p-4 border bg-white">
+                    <div class="p-4 border bg-white rounded-4 shadow-sm">
                         <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-dark text-white rounded-circle p-2" style="width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center;">3</span>
@@ -105,7 +105,7 @@
                         <input type="hidden" name="shipping_cost" id="inputShippingCost" value="0" required>
                     </div>
 
-                    <div class="p-4 border bg-white">
+                    <div class="p-4 border bg-white rounded-4 shadow-sm">
                         <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
                             <span class="badge bg-dark text-white rounded-circle p-2" style="width:24px; height:24px; display:inline-flex; align-items:center; justify-content:center;">4</span>
                             <h5 class="font-serif fw-bold text-dark m-0">Metode Pembayaran</h5>
@@ -169,7 +169,7 @@
             </div>
 
             <div class="col-lg-5">
-                <div class="p-4 border bg-white sticky-top" style="top: 100px;">
+                <div class="p-4 border bg-white sticky-top rounded-4 shadow-sm" style="top: 100px;">
                     <h5 class="font-serif fw-bold text-dark mb-3 pb-2 border-bottom">Ringkasan Pesanan</h5>
 
                     <div class="d-flex flex-column gap-3 mb-4 overflow-auto" style="max-height: 280px;">
@@ -218,8 +218,8 @@
                     </div>
 
                     <div class="d-grid mt-4">
-                        <button type="submit" class="btn btn-brand-dark py-3" id="btnSubmitOrder">
-                            Konfirmasi & Bayar Sekarang
+                        <button type="submit" class="btn btn-brand-dark rounded-pill py-3" id="btnSubmitOrder">
+                            Konfirmasi & Bayar Sekarang <i class="bi bi-arrow-right ms-1"></i>
                         </button>
                     </div>
 

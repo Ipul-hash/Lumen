@@ -19,13 +19,13 @@
 <div class="container-fluid px-lg-5 py-5">
     <div class="row g-4">
         <div class="col-lg-3">
-            <div class="p-4 border bg-white sticky-top" style="top: 90px; z-index: 10;">
+            <div class="p-4 border bg-white sticky-top rounded-4 shadow-sm" style="top: 90px; z-index: 10;">
                 <h6 class="text-uppercase fw-bold fs-7 tracking-wider mb-3">Kategori Produk</h6>
                 <div class="d-flex flex-column gap-2 mb-4">
                     @foreach($categories as $cat)
-                        <a href="{{ route('shop.category', $cat->slug) }}" class="text-decoration-none fs-7 py-1 d-flex justify-content-between align-items-center {{ $cat->id === $category->id ? 'fw-bold text-dark border-start border-2 border-dark ps-2' : 'text-muted' }}">
+                        <a href="{{ route('shop.category', $cat->slug) }}" class="text-decoration-none fs-7 py-2 px-2 rounded-2 d-flex justify-content-between align-items-center {{ $cat->id === $category->id ? 'fw-bold text-dark bg-light border-start border-3 border-dark ps-2' : 'text-muted' }}">
                             <span>{{ $cat->name }}</span>
-                            <span class="badge bg-light text-dark border">{{ $cat->products_count ?? $cat->products()->where('is_active', true)->count() }}</span>
+                            <span class="badge rounded-pill bg-light text-dark border">{{ $cat->products_count ?? $cat->products()->where('is_active', true)->count() }}</span>
                         </a>
                     @endforeach
                 </div>
@@ -33,31 +33,32 @@
                 <div class="border-top pt-4">
                     <h6 class="text-uppercase fw-bold fs-7 tracking-wider mb-2">Panduan Rambut</h6>
                     <p class="fs-8 text-muted mb-3">Bingung menentukan level bleaching sebelum aplikasi warna?</p>
-                    <a href="{{ route('shop.shadeGuide') }}" class="btn btn-outline-dark btn-sm rounded-0 w-100 py-2">
-                        Buka Shade Finder
+                    <a href="{{ route('shop.shadeGuide') }}" class="btn btn-outline-dark btn-sm rounded-pill w-100 py-2 fw-semibold">
+                        Buka Shade Finder <i class="bi bi-chevron-right ms-1"></i>
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-9">
-            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom oxva-reveal">
                 <span class="fs-7 text-muted">Menampilkan {{ $products->total() }} formula pewarna</span>
             </div>
 
             <div class="row g-4">
                 @forelse($products as $product)
-                <div class="col-6 col-md-4">
-                    <div class="product-card h-100 d-flex flex-column">
-                        <div class="img-wrapper mb-3 position-relative">
-                            @php
-                                $firstVariant = $product->activeVariants->first();
-                                $hasColorCode = $firstVariant && $firstVariant->color_code;
-                            @endphp
+                @php
+                    $staggerDelay = ($loop->index % 3) + 1;
+                    $firstVariant = $product->activeVariants->first();
+                    $hasColorCode = $firstVariant && $firstVariant->color_code;
+                @endphp
+                <div class="col-6 col-md-4 oxva-reveal delay-{{ $staggerDelay }}">
+                    <div class="product-card">
+                        <div class="img-wrapper">
                             @if($product->primaryImage)
                                 <img src="{{ str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path) }}" alt="{{ $product->name }}">
                             @else
-                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-center p-3" style="background: {{ $hasColorCode ? 'linear-gradient(180deg, ' . $firstVariant->color_code . ' 0%, #1e1e1e 100%)' : '#f0f0f0' }}; color: {{ $hasColorCode ? '#fff' : '#000' }};">
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center text-center p-3" style="background: {{ $hasColorCode ? 'linear-gradient(180deg, ' . $firstVariant->color_code . ' 0%, #171717 100%)' : '#f0f0f4' }}; color: {{ $hasColorCode ? '#fff' : '#111' }};">
                                     <div>
                                         <div class="fs-6 font-serif fw-bold">{{ $product->name }}</div>
                                         <div class="fs-8 opacity-75 mt-1">{{ $firstVariant->color_name ?? 'Formula' }}</div>
@@ -73,6 +74,9 @@
                                         <span class="swatch-circle" style="background-color: {{ $v->color_code }};" title="{{ $v->color_name }}"></span>
                                     @endif
                                 @endforeach
+                                @if($product->activeVariants->count() > 5)
+                                    <span class="fs-8 text-muted ms-1">+{{ $product->activeVariants->count() - 5 }}</span>
+                                @endif
                             </div>
 
                             <h5 class="fs-6 fw-bold mb-1">
@@ -92,11 +96,11 @@
                                 </div>
 
                                 @if($product->activeVariants->count() === 1 && $product->activeVariants->first()->stock > 0)
-                                    <button type="button" class="btn btn-sm btn-outline-dark rounded-0 px-3 py-1" onclick="window.addToCart({{ $product->activeVariants->first()->id }}, 1)">
+                                    <button type="button" class="btn-card-action" onclick="window.addToCart({{ $product->activeVariants->first()->id }}, 1)">
                                         + Beli
                                     </button>
                                 @else
-                                    <a href="{{ route('shop.show', $product->slug) }}" class="btn btn-sm btn-outline-dark rounded-0 px-3 py-1">
+                                    <a href="{{ route('shop.show', $product->slug) }}" class="btn-card-action-outline">
                                         Pilih Shade
                                     </a>
                                 @endif
