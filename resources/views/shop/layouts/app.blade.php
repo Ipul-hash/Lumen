@@ -659,10 +659,6 @@
                         <i class="bi bi-geo-alt me-1"></i> Cek Pengiriman
                     </a>
 
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-dark rounded-0 px-3 py-1 fs-7 fw-semibold">
-                        <i class="bi bi-speedometer2 me-1"></i> Admin Portal
-                    </a>
-
                     <button class="btn btn-link text-dark position-relative p-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas" id="btnOpenCart">
                         <i class="bi bi-bag fs-4"></i>
                         <span class="badge-cart-count" id="headerCartCount">0</span>

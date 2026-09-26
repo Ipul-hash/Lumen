@@ -3,25 +3,25 @@
 @section('title', 'Kalkulator Formula Racikan Rambut | LUMEN Hair Color Atelier')
 
 @section('content')
-<div class="bg-dark text-white py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #09090d 0%, #15141d 50%, #060608 100%);">
+<div class="bg-dark text-white py-4 py-lg-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #09090d 0%, #15141d 50%, #060608 100%);">
     <div class="container px-lg-5 position-relative" style="z-index: 1;">
         <div class="text-center mw-800px mx-auto">
             <div class="text-uppercase tracking-wider fs-8 text-white-50 fw-bold mb-2">
                 Beauty-Tech Diagnostic Engine
             </div>
-            <h1 class="display-5 font-serif fw-bold text-white mb-3">Atelier Hair Color & Bleach Mixer</h1>
-            <p class="text-light opacity-75 fs-6 mx-auto mb-0" style="max-width: 650px; line-height: 1.6;">
+            <h1 class="display-6 display-lg-5 font-serif fw-bold text-white mb-2">Atelier Hair Color & Bleach Mixer</h1>
+            <p class="text-light opacity-75 fs-7 fs-md-6 mx-auto mb-0" style="max-width: 650px; line-height: 1.6;">
                 Pilih kanvas dasar helai rambut Anda saat ini dan warna impian yang diinginkan. Sistem formula salon kami akan mengkalkulasi kebutuhan lifting, rasio developer, estimasi durasi, dan meracik paket bahan lengkap yang siap Anda beli.
             </p>
         </div>
     </div>
 </div>
 
-<div class="container-fluid px-lg-5 py-5" style="background: #fdfdfd;">
-    <div class="row g-4">
+<div class="container-fluid px-lg-5 py-4 py-lg-5 pb-5 mb-5" style="background: #fdfdfd;">
+    <div class="row g-4 align-items-start">
         <div class="col-lg-7">
             <div class="card border rounded-4 shadow-sm p-4 p-md-5 mb-4 bg-white">
-                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom step-anchor" id="stepCanvas">
                     <span class="badge bg-dark text-white rounded-circle p-2" style="width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center;">1</span>
                     <div>
                         <h5 class="font-serif fw-bold text-dark mb-0">Kanvas Helai Rambut Anda Saat Ini</h5>
@@ -59,7 +59,7 @@
                     @endforeach
                 </div>
 
-                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom pt-3">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom pt-3 step-anchor" id="stepLength">
                     <span class="badge bg-dark text-white rounded-circle p-2" style="width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center;">2</span>
                     <div>
                         <h5 class="font-serif fw-bold text-dark mb-0">Panjang & Ketebalan Rambut</h5>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom pt-3">
+                <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom pt-3 step-anchor" id="stepShade">
                     <span class="badge bg-dark text-white rounded-circle p-2" style="width:32px; height:32px; display:inline-flex; align-items:center; justify-content:center;">3</span>
                     <div>
                         <h5 class="font-serif fw-bold text-dark mb-0">Target Shade Warna Impian</h5>
@@ -119,9 +119,9 @@
         </div>
 
         <div class="col-lg-5">
-            <div class="position-sticky" style="top: 90px; z-index: 10;">
-                <div class="card border rounded-4 shadow-sm bg-white overflow-hidden" id="prescriptionCard">
-                    <div class="card-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
+            <div class="prescription-card-wrapper" id="prescriptionWrapper">
+                <div class="card border rounded-4 shadow-sm bg-white overflow-hidden prescription-card-inner" id="prescriptionCard">
+                    <div class="card-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center flex-shrink-0">
                         <div>
                             <span class="fs-8 text-white-50 text-uppercase fw-bold tracking-wider d-block">Resep Formulasi Laboratorium</span>
                             <h5 class="font-serif fw-bold text-white mb-0">Atelier Prescription Protocol</h5>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
 
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 custom-scroll-area">
                         <div class="p-3 bg-light rounded-3 mb-4">
                             <div class="row g-2 text-center">
                                 <div class="col-5">
@@ -222,6 +222,15 @@
 
 @push('styles')
 <style>
+html {
+    scroll-behavior: smooth;
+}
+body {
+    overflow-y: auto !important;
+}
+.step-anchor, #prescriptionCard {
+    scroll-margin-top: 130px;
+}
 .level-card-btn, .hair-length-btn, .target-shade-btn {
     background: #ffffff;
     cursor: pointer;
@@ -240,6 +249,45 @@
 .fs-9 {
     font-size: 0.72rem;
 }
+.prescription-card-wrapper {
+    position: sticky;
+    top: 95px;
+    z-index: 10;
+}
+.prescription-card-inner {
+    max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+}
+.custom-scroll-area {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+.custom-scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scroll-area::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 999px;
+}
+@media (max-width: 991.98px) {
+    .prescription-card-wrapper {
+        position: static !important;
+        max-height: none !important;
+    }
+    .prescription-card-inner {
+        max-height: none !important;
+    }
+    .custom-scroll-area {
+        overflow-y: visible !important;
+        max-height: none !important;
+    }
+}
 </style>
 @endpush
 
@@ -255,6 +303,10 @@ function selectBaseLevel(lvl, btn) {
     btn.classList.add('active');
     currentSelectedLevel = lvl;
     fetchFormulaCalculation();
+    const nextStep = document.getElementById('stepLength');
+    if (nextStep) {
+        nextStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function selectHairLength(len, btn) {
@@ -262,6 +314,10 @@ function selectHairLength(len, btn) {
     btn.classList.add('active');
     currentSelectedLength = len;
     fetchFormulaCalculation();
+    const nextStep = document.getElementById('stepShade');
+    if (nextStep) {
+        nextStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 }
 
 function selectTargetShade(variantId, btn) {
@@ -269,6 +325,12 @@ function selectTargetShade(variantId, btn) {
     btn.classList.add('active');
     currentSelectedTargetVariant = variantId;
     fetchFormulaCalculation();
+    if (window.innerWidth < 992) {
+        const nextStep = document.getElementById('prescriptionCard');
+        if (nextStep) {
+            nextStep.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 }
 
 function fetchFormulaCalculation() {
