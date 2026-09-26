@@ -256,7 +256,7 @@ class DatabaseSeeder extends Seeder
             'length' => 7,
             'width' => 7,
             'height' => 20,
-            'is_featured' => false,
+            'is_featured' => true,
             'is_active' => true,
         ]);
 
@@ -289,7 +289,7 @@ class DatabaseSeeder extends Seeder
             'length' => 20,
             'width' => 15,
             'height' => 8,
-            'is_featured' => false,
+            'is_featured' => true,
             'is_active' => true,
         ]);
 

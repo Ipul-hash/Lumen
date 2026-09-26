@@ -116,48 +116,64 @@
             </div>
         </div>
 
-        <div class="row g-4">
+        <div class="d-flex flex-wrap gap-2 mb-4 oxva-reveal">
+            <button type="button" class="btn btn-sm btn-dark rounded-pill px-3 py-1 fs-8 fw-semibold catalog-filter-btn active" onclick="window.filterCatalogByCategory('all', this)">
+                Semua Formulasi ({{ $featuredProducts->count() }})
+            </button>
+            @foreach($categories as $cat)
+                @php
+                    $catCount = $featuredProducts->where('category_id', $cat->id)->count();
+                @endphp
+                @if($catCount > 0)
+                    <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1 fs-8 fw-semibold catalog-filter-btn" onclick="window.filterCatalogByCategory('{{ $cat->slug }}', this)">
+                        {{ $cat->name }} ({{ $catCount }})
+                    </button>
+                @endif
+            @endforeach
+        </div>
+
+        <div class="row g-4" id="catalogGrid">
             @forelse($featuredProducts as $product)
             @php
                 $staggerDelay = ($loop->index % 4) + 1;
                 $firstVariant = $product->activeVariants->first();
                 $hasColorCode = $firstVariant && $firstVariant->color_code;
+                $catSlug = $product->category->slug ?? 'uncategorized';
             @endphp
-            <div class="col-6 col-md-4 col-lg-3 oxva-reveal delay-{{ $staggerDelay }}">
+            <div class="col-6 col-md-4 col-lg-3 oxva-reveal delay-{{ $staggerDelay }} catalog-product-item" data-category="{{ $catSlug }}">
                 <div class="product-card">
-                    <div class="img-wrapper">
+                    <div class="img-wrapper" id="cardImgWrapper_{{ $product->id }}">
                         @if($product->primaryImage)
-                            <img src="{{ str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path) }}" alt="{{ $product->name }}">
+                            <img id="cardImg_{{ $product->id }}" src="{{ str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path) }}" alt="{{ $product->name }}">
                         @else
-                            <div class="w-100 h-100 d-flex align-items-center justify-content-center text-center p-3" style="background: {{ $hasColorCode ? 'linear-gradient(180deg, ' . $firstVariant->color_code . ' 0%, #171717 100%)' : '#f0f0f4' }}; color: {{ $hasColorCode ? '#fff' : '#111' }};">
+                            <div class="w-100 h-100 d-flex align-items-center justify-content-center text-center p-3 card-gradient-preview" id="cardPlaceholder_{{ $product->id }}" style="background: {{ $hasColorCode ? 'linear-gradient(180deg, ' . $firstVariant->color_code . ' 0%, #171717 100%)' : '#f0f0f4' }}; color: {{ $hasColorCode ? '#fff' : '#111' }};">
                                 <div>
                                     <div class="fs-6 font-serif fw-bold">{{ $product->name }}</div>
-                                    <div class="fs-8 opacity-75 mt-1">{{ $firstVariant->color_name ?? 'Formula' }}</div>
+                                    <div class="fs-8 opacity-75 mt-1 card-variant-title" id="cardVariantTitle_{{ $product->id }}">{{ $firstVariant->color_name ?? 'Formula' }}</div>
                                 </div>
                             </div>
                         @endif
-
                     </div>
 
                     <div class="flex-grow-1 d-flex flex-column">
                         <div class="d-flex align-items-center justify-content-between mb-2">
                             <div class="d-flex align-items-center gap-1">
-                                @foreach($product->activeVariants->take(5) as $v)
+                                @foreach($product->activeVariants->take(5) as $vIndex => $v)
                                     @if($v->color_code)
-                                        <span class="swatch-circle" style="background-color: {{ $v->color_code }};" title="{{ $v->color_name }}"></span>
+                                        <button type="button" class="swatch-circle-btn {{ $vIndex === 0 ? 'active' : '' }}" style="background-color: {{ $v->color_code }};" title="{{ $v->color_name ?? $v->name }}" onclick="window.switchCardVariant({{ $product->id }}, {{ $v->id }}, '{{ addslashes($v->color_name ?? $v->name) }}', '{{ $v->color_code }}', '{{ $v->formatted_price }}', {{ $v->stock }}, this)" aria-label="{{ $v->color_name ?? $v->name }}"></button>
                                     @endif
                                 @endforeach
                                 @if($product->activeVariants->count() > 5)
                                     <span class="fs-8 text-muted ms-1">+{{ $product->activeVariants->count() - 5 }}</span>
                                 @endif
                             </div>
-                            @if($product->category)
-                                <span class="fs-8 text-muted text-uppercase fw-semibold tracking-wide">{{ $product->category->name }}</span>
-                            @endif
+                            <span class="fs-8 text-muted text-uppercase fw-semibold tracking-wide" id="cardShadeLabel_{{ $product->id }}">
+                                {{ $firstVariant->color_name ?? ($product->category ? $product->category->name : '') }}
+                            </span>
                         </div>
 
                         <h5 class="fs-6 fw-bold mb-1">
-                            <a href="{{ route('shop.show', $product->slug) }}" class="text-dark text-decoration-none">
+                            <a href="{{ route('shop.show', $product->slug) }}" id="cardDetailLink_{{ $product->id }}" data-base-url="{{ route('shop.show', $product->slug) }}" class="text-dark text-decoration-none">
                                 {{ $product->name }}
                             </a>
                         </h5>
@@ -169,18 +185,24 @@
                         <div class="mt-auto pt-2 d-flex align-items-center justify-content-between">
                             <div>
                                 <span class="fs-8 text-muted d-block">Mulai dari</span>
-                                <span class="fs-6 fw-bolder text-dark">{{ $product->formatted_price }}</span>
+                                <span class="fs-6 fw-bolder text-dark" id="cardPrice_{{ $product->id }}">{{ $firstVariant ? $firstVariant->formatted_price : $product->formatted_price }}</span>
                             </div>
 
-                            @if($product->activeVariants->count() === 1 && $product->activeVariants->first()->stock > 0)
-                                <button type="button" class="btn-card-action" onclick="window.addToCart({{ $product->activeVariants->first()->id }}, 1)">
-                                    + Beli
-                                </button>
-                            @else
-                                <a href="{{ route('shop.show', $product->slug) }}" class="btn-card-action-outline">
-                                    Pilih Shade
-                                </a>
-                            @endif
+                            <div id="cardActionWrap_{{ $product->id }}">
+                                @if($firstVariant && $firstVariant->stock > 0)
+                                    <button type="button" class="btn-card-action" onclick="window.addToCart({{ $firstVariant->id }}, 1)">
+                                        + Beli
+                                    </button>
+                                @elseif($firstVariant && $firstVariant->stock <= 0)
+                                    <button type="button" class="btn-card-action-outline disabled" disabled>
+                                        Habis
+                                    </button>
+                                @else
+                                    <a href="{{ route('shop.show', $product->slug) }}" class="btn-card-action-outline">
+                                        Pilih Shade
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

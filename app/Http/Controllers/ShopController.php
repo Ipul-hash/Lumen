@@ -19,15 +19,8 @@ class ShopController extends Controller
 
         $featuredProducts = Product::with(['primaryImage', 'activeVariants', 'category'])
             ->where('is_active', true)
-            ->where('is_featured', true)
+            ->orderByDesc('is_featured')
             ->latest()
-            ->take(8)
-            ->get();
-
-        $allProducts = Product::with(['primaryImage', 'activeVariants', 'category'])
-            ->where('is_active', true)
-            ->latest()
-            ->take(12)
             ->get();
 
         return view('shop.index', compact('categories', 'featuredProducts', 'allProducts'));

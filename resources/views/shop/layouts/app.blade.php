@@ -227,6 +227,53 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
         }
 
+        .swatch-circle-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            padding: 0;
+            outline: none;
+            background: transparent;
+            transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
+            position: relative;
+        }
+
+        .swatch-circle-btn:hover {
+            transform: scale(1.28);
+            box-shadow: 0 0 0 2px var(--brand-black);
+            z-index: 2;
+        }
+
+        .swatch-circle-btn.active {
+            transform: scale(1.22);
+            box-shadow: 0 0 0 2px var(--brand-black);
+            z-index: 3;
+        }
+
+        .card-gradient-preview {
+            transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-variant-title {
+            transition: opacity 0.22s ease, transform 0.22s ease;
+        }
+
+        .catalog-filter-btn {
+            transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .catalog-filter-btn.active {
+            background-color: var(--brand-black) !important;
+            color: #ffffff !important;
+            border-color: var(--brand-black) !important;
+        }
+
         .btn-card-action {
             border-radius: 100px;
             font-size: 0.75rem;
@@ -912,6 +959,79 @@ window.addToCart = function(variantId, quantity = 1) {
     })
     .catch(() => {
         window.showToast('error', 'Terjadi kesalahan sistem saat menambahkan produk');
+    });
+};
+
+window.switchCardVariant = function(productId, variantId, colorName, colorCode, formattedPrice, stock, clickedBtn) {
+    if (!clickedBtn) return;
+    const card = clickedBtn.closest('.product-card');
+    if (!card) return;
+
+    card.querySelectorAll('.swatch-circle-btn').forEach(function(b) {
+        b.classList.remove('active');
+    });
+    clickedBtn.classList.add('active');
+
+    const placeholder = document.getElementById('cardPlaceholder_' + productId);
+    if (placeholder && colorCode) {
+        placeholder.style.background = 'linear-gradient(180deg, ' + colorCode + ' 0%, #171717 100%)';
+    }
+
+    const titleEl = document.getElementById('cardVariantTitle_' + productId);
+    if (titleEl) {
+        titleEl.style.opacity = '0';
+        titleEl.style.transform = 'translateY(3px)';
+        setTimeout(function() {
+            titleEl.textContent = colorName;
+            titleEl.style.opacity = '0.9';
+            titleEl.style.transform = 'translateY(0)';
+        }, 120);
+    }
+
+    const shadeLabel = document.getElementById('cardShadeLabel_' + productId);
+    if (shadeLabel) {
+        shadeLabel.textContent = colorName;
+    }
+
+    const priceEl = document.getElementById('cardPrice_' + productId);
+    if (priceEl && formattedPrice) {
+        priceEl.textContent = formattedPrice;
+    }
+
+    const actionWrap = document.getElementById('cardActionWrap_' + productId);
+    if (actionWrap) {
+        if (stock > 0) {
+            actionWrap.innerHTML = '<button type="button" class="btn-card-action" onclick="window.addToCart(' + variantId + ', 1)">+ Beli</button>';
+        } else {
+            actionWrap.innerHTML = '<button type="button" class="btn-card-action-outline disabled" disabled>Habis</button>';
+        }
+    }
+
+    const detailLink = document.getElementById('cardDetailLink_' + productId);
+    if (detailLink) {
+        const rawUrl = detailLink.getAttribute('data-base-url') || detailLink.href.split('?')[0];
+        detailLink.href = rawUrl + '?variant=' + variantId;
+    }
+};
+
+window.filterCatalogByCategory = function(categorySlug, clickedBtn) {
+    document.querySelectorAll('.catalog-filter-btn').forEach(function(b) {
+        b.classList.remove('active');
+        b.classList.add('btn-outline-dark');
+        b.classList.remove('btn-dark');
+    });
+    clickedBtn.classList.add('active');
+    clickedBtn.classList.remove('btn-outline-dark');
+    clickedBtn.classList.add('btn-dark');
+
+    const items = document.querySelectorAll('.catalog-product-item');
+    items.forEach(function(item) {
+        const cat = item.getAttribute('data-category');
+        if (categorySlug === 'all' || cat === categorySlug) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
     });
 };
 
