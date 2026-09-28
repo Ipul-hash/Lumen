@@ -22,11 +22,21 @@ class KiriminAjaService
             : 'https://tdev.kiriminaja.com/api/mitra';
     }
 
+    protected function client()
+    {
+        $client = Http::withoutVerifying();
+        $proxy = env('FIXIE_URL') ?: env('HTTP_PROXY') ?: StoreSetting::get('kiriminaja_proxy');
+        if (!empty($proxy)) {
+            $client = $client->withOptions(['proxy' => $proxy]);
+        }
+        return $client;
+    }
+
     public function calculateRates(int $originDistrictId, int $destinationDistrictId, int $weightInGrams, array $couriers = ['jnt', 'sicepat', 'jne']): array
     {
         if (!empty($this->apiKey)) {
             try {
-                $response = Http::withoutVerifying()
+                $response = $this->client()
                     ->withHeaders([
                         'Authorization' => 'Bearer ' . $this->apiKey,
                         'Accept' => 'application/json',
@@ -146,7 +156,7 @@ class KiriminAjaService
         ];
 
         try {
-            $response = Http::withoutVerifying()
+            $response = $this->client()
                 ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->apiKey,
                     'Accept' => 'application/json',
@@ -223,7 +233,7 @@ class KiriminAjaService
 
         if (!empty($this->apiKey) && !empty($orderNumber)) {
             try {
-                $response = Http::withoutVerifying()
+                $response = $this->client()
                     ->withHeaders([
                         'Authorization' => 'Bearer ' . $this->apiKey,
                         'Accept' => 'application/json',
@@ -320,7 +330,7 @@ class KiriminAjaService
         }
 
         try {
-            $response = Http::withoutVerifying()
+            $response = $this->client()
                 ->withHeaders([
                     'Authorization' => 'Bearer ' . $this->apiKey,
                     'Accept' => 'application/json',

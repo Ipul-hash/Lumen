@@ -170,10 +170,16 @@
                         <div class="text-muted fs-8 mt-1">PIN keamanan 6 digit yang terdaftar di akun KiriminAja.</div>
                     </div>
 
+                    <div class="mb-5">
+                        <label class="form-label fw-semibold">Outgoing Static Proxy / Fixie URL (Opsional untuk Render)</label>
+                        <input type="text" name="kiriminaja_proxy" class="form-control form-control-solid" value="{{ $settings['kiriminaja_proxy'] ?? '' }}" placeholder="http://fixie:TOKEN@velodrome.usefixie.com:80">
+                        <div class="text-muted fs-8 mt-1">Gunakan proxy statis (seperti Fixie) agar IP keluar server Render tetap konsisten dan lolos IP Whitelist KiriminAja.</div>
+                    </div>
+
                     <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-3 mb-4">
                         <i class="ki-duotone ki-information fs-2 text-warning me-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
                         <div class="fs-8 text-gray-700">
-                            <b>Penting (IP Whitelist):</b> KiriminAja mewajibkan IP Server terdaftar pada menu <b>Integrasi Aplikasi &gt; Pengaturan API / IP Whitelist</b> di Dashboard KiriminAja agar request pickup tidak ditolak.
+                            <b>Penting (IP Whitelist):</b> KiriminAja mewajibkan IP Server terdaftar pada menu <b>Integrasi Aplikasi &gt; Pengaturan API / IP Whitelist</b> di Dashboard KiriminAja. Jika menggunakan Fixie / Proxy statis, daftarkan IP proxy Fixie ke KiriminAja.
                         </div>
                     </div>
 
