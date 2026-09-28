@@ -161,7 +161,7 @@
                                 </i>
                             </button>
                         </div>
-                        <div class="text-muted fs-8 mt-1">Format token sandbox KiriminAja (v4.local.xxxx).</div>
+                        <div class="text-muted fs-8 mt-1">Gunakan API Token dari Dashboard KiriminAja (Production: app.kiriminaja.com / Sandbox: tdev.kiriminaja.com).</div>
                     </div>
 
                     <div class="mb-5">
@@ -170,7 +170,14 @@
                         <div class="text-muted fs-8 mt-1">PIN keamanan 6 digit yang terdaftar di akun KiriminAja.</div>
                     </div>
 
-                    <div class="mt-4 pt-2">
+                    <div class="notice d-flex bg-light-warning rounded border-warning border border-dashed p-3 mb-4">
+                        <i class="ki-duotone ki-information fs-2 text-warning me-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                        <div class="fs-8 text-gray-700">
+                            <b>Penting (IP Whitelist):</b> KiriminAja mewajibkan IP Server terdaftar pada menu <b>Integrasi Aplikasi &gt; Pengaturan API / IP Whitelist</b> di Dashboard KiriminAja agar request pickup tidak ditolak.
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
                         <button type="button" class="btn btn-light-primary w-100" id="btnTestKiriminAja">
                             <i class="ki-duotone ki-rocket fs-4 me-2"><span class="path1"></span><span class="path2"></span></i> Uji Koneksi KiriminAja
                         </button>
@@ -343,6 +350,21 @@ if (btnTest) {
                     title: 'Koneksi Berhasil!',
                     text: data.message || 'API Key KiriminAja berhasil terhubung.',
                     confirmButtonText: 'Selesai'
+                });
+            } else if (data.ip_blocked && data.your_ip) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'IP Server Belum Di-Whitelist',
+                    html: '<div class="text-start fs-7">' +
+                        '<p class="mb-2">Server KiriminAja menolak koneksi karena alamat IP server belum didaftarkan di whitelist akun Anda:</p>' +
+                        '<div class="alert alert-warning py-2 px-3 fw-bold text-center fs-6 mb-3">' + data.your_ip + '</div>' +
+                        '<ol class="ps-3 mb-0 text-muted">' +
+                            '<li>Login ke Dashboard KiriminAja (<b>app.kiriminaja.com</b>).</li>' +
+                            '<li>Pilih menu <b>Integrasi Aplikasi &gt; Pengaturan API / IP Whitelist</b>.</li>' +
+                            '<li>Tambahkan alamat IP <code>' + data.your_ip + '</code> ke daftar whitelist.</li>' +
+                        '</ol>' +
+                    '</div>',
+                    confirmButtonText: 'Saya Mengerti'
                 });
             } else {
                 Swal.fire({

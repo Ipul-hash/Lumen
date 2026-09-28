@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Models\Shipment;
 use App\Models\StoreSetting;
+use App\Services\KiriminAjaService;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -298,7 +299,7 @@ class OrderController extends Controller
             ->with('success', 'Pesanan berhasil dibatalkan dan seluruh stok produk telah dikembalikan.');
     }
 
-    public function requestPickup(Order $order)
+    public function requestPickup(Order $order, KiriminAjaService $service)
     {
         if (!$order->isPaid()) {
             return redirect()->back()->with('error', 'Pesanan belum lunas! Pembayaran harus diverifikasi terlebih dahulu sebelum paket dapat dikirim ke KiriminAja.');
@@ -314,25 +315,14 @@ class OrderController extends Controller
             return redirect()->back()->with('warning', 'Pesanan ini sudah memiliki nomor resi AWB: ' . $shipment->waybill_number);
         }
 
-        $prefix = strtoupper($shipment->courier_code);
-        $generatedAwb = $prefix . date('ymd') . rand(100000, 999999) . 'ID';
-        $bookingId = 'KA-BKG-' . rand(100000, 999999);
-
-        $shipment->update([
-            'booking_id' => $bookingId,
-            'waybill_number' => $generatedAwb,
-            'status' => 'picked_up',
-            'pickup_scheduled_at' => now(),
-            'shipped_at' => now(),
-        ]);
-
-        $order->update([
-            'status' => 'shipped',
-            'shipped_at' => now(),
-        ]);
-
-        return redirect()->back()
-            ->with('success', 'Sukses request pickup KiriminAja! Resi AWB terbit: ' . $generatedAwb);
+        try {
+            $result = $service->requestPickup($order);
+            return redirect()->back()
+                ->with('success', 'Sukses bridging KiriminAja! ' . ($result['message'] ?? 'Resi AWB resmi: ' . $result['waybill_number']));
+        } catch (\Throwable $e) {
+            return redirect()->back()
+                ->with('error', 'Gagal bridging ke KiriminAja: ' . $e->getMessage());
+        }
     }
 
     public function printShippingLabel(Order $order)

@@ -84,91 +84,120 @@ class KiriminAjaService
                 'success' => true,
                 'waybill_number' => $shipment->waybill_number,
                 'booking_id' => $shipment->booking_id,
-                'message' => 'Resi AWB sudah diterbitkan sebelumnya.',
+                'message' => 'Resi AWB sudah diterbitkan sebelumnya: ' . $shipment->waybill_number,
             ];
         }
 
-        $storeAddress = StoreSetting::get('origin_address', 'Jl. Radio Dalam Raya No. 42');
-        $storePhone = StoreSetting::get('store_phone', '081288990011');
-        $storeName = StoreSetting::get('store_name', 'LUMEN Hair Color');
+        if (empty($this->apiKey)) {
+            throw new \Exception('API Key KiriminAja belum diatur. Silakan masukkan API Key di menu Logistik & Pengiriman.');
+        }
 
-        if (!empty($this->apiKey)) {
-            try {
-                $response = Http::withoutVerifying()
-                    ->withHeaders([
-                        'Authorization' => 'Bearer ' . $this->apiKey,
-                        'Accept' => 'application/json',
-                        'Content-Type' => 'application/json',
-                    ])
-                    ->timeout(8)
-                    ->post("{$this->baseUrl}/v6.1/request_pickup", [
-                        'address' => $storeAddress,
-                        'phone' => $storePhone,
-                        'name' => $storeName,
-                        'origin' => (int) $shipment->origin_district_id,
-                        'schedule' => 'earliest',
-                        'packages' => [
-                            [
-                                'order_id' => $order->order_number,
-                                'destination' => (int) $shipment->destination_district_id,
-                                'weight' => (int) $shipment->total_weight,
-                                'item_value' => (int) round($order->total_amount),
-                                'courier' => $shipment->courier_code,
-                                'service' => $shipment->service_type,
-                                'recipient_name' => $order->customer_name,
-                                'recipient_phone' => $order->customer_phone,
-                                'recipient_address' => $order->shipping_address['address_line'] ?? '',
-                                'package_type' => 'Pewarna Rambut / Kosmetik',
-                                'item_name' => 'Produk Pewarna Rambut LUMEN Atelier',
-                            ]
-                        ]
-                    ]);
+        $storeAddress = (string) StoreSetting::get('origin_address', 'Jl. Radio Dalam Raya No. 42');
+        $storePhone = (string) StoreSetting::get('store_phone', '081288990011');
+        $storeName = (string) StoreSetting::get('store_name', 'LUMEN Hair Color');
+        $originDistrictId = (int) ($shipment->origin_district_id ?: StoreSetting::get('origin_district_id', 2105));
+        $originPostalCode = (string) StoreSetting::get('origin_postal_code', '12190');
 
-                if ($response->successful()) {
-                    $json = $response->json();
-                    if (($json['status'] ?? false) && isset($json['data'])) {
-                        $data = $json['data'];
-                        $awb = $data['awb'] ?? $data['waybill_number'] ?? strtoupper($shipment->courier_code) . date('ymd') . rand(100000, 999999) . 'ID';
-                        $bookingId = $data['booking_id'] ?? 'KA-BKG-' . rand(100000, 999999);
+        $shippingAddress = is_array($order->shipping_address) ? $order->shipping_address : [];
+        $destAddress = (string) ($shippingAddress['address_line'] ?? ($order->customer_address ?? 'Alamat Pemesan'));
+        if (strlen($destAddress) < 10) {
+            $destAddress = $destAddress . ', ' . ($shippingAddress['district_name'] ?? '') . ', ' . ($shippingAddress['city_name'] ?? '');
+        }
 
-                        $shipment->update([
-                            'booking_id' => $bookingId,
-                            'waybill_number' => $awb,
-                            'status' => 'picked_up',
-                            'pickup_scheduled_at' => now(),
-                            'shipped_at' => now(),
-                            'kiriminaja_response' => $data,
-                            'tracking_history' => $this->getInitialTrackingCheckpoints($awb, $shipment->courier_name),
-                        ]);
+        $destPhone = (string) ($order->customer_phone ?: '081288889999');
+        $destDistrictId = (int) ($shipment->destination_district_id ?: ($shippingAddress['district_id'] ?? 2108));
+        $destPostalCode = (string) ($shippingAddress['postal_code'] ?? '12000');
+        $courierCode = strtolower((string) ($shipment->courier_code ?: 'jne'));
+        $serviceType = strtoupper((string) ($shipment->service_type ?: 'REG'));
+        $totalWeight = max(100, (int) ($shipment->total_weight ?: 250));
+        $itemValue = max(10000, (int) round((float) $order->total_amount));
+        $shippingCost = (int) round((float) ($shipment->shipping_cost ?: 0));
 
-                        $order->update([
-                            'status' => 'shipped',
-                            'shipped_at' => now(),
-                        ]);
+        $payload = [
+            'address' => $storeAddress,
+            'phone' => $storePhone,
+            'name' => $storeName,
+            'zipcode' => $originPostalCode,
+            'kecamatan_id' => $originDistrictId,
+            'schedule' => 'earliest',
+            'packages' => [
+                [
+                    'order_id' => (string) $order->order_number,
+                    'destination_name' => (string) ($order->customer_name ?: 'Pelanggan'),
+                    'destination_phone' => $destPhone,
+                    'destination_address' => $destAddress,
+                    'destination_kecamatan_id' => $destDistrictId,
+                    'destination_zipcode' => $destPostalCode,
+                    'weight' => $totalWeight,
+                    'width' => 10,
+                    'length' => 15,
+                    'height' => 10,
+                    'item_value' => $itemValue,
+                    'shipping_cost' => $shippingCost,
+                    'service' => $courierCode,
+                    'service_type' => $serviceType,
+                    'item_name' => 'Produk Pewarna Rambut LUMEN Atelier',
+                    'package_type_id' => 1,
+                    'cod' => 0,
+                    'drop' => false,
+                    'note' => 'Pesanan LUMEN Atelier #' . $order->order_number,
+                ]
+            ]
+        ];
 
-                        return [
-                            'success' => true,
-                            'waybill_number' => $awb,
-                            'booking_id' => $bookingId,
-                            'message' => 'Sukses request pickup kurir KiriminAja.',
-                        ];
-                    }
-                }
-            } catch (\Throwable $e) {
+        try {
+            $response = Http::withoutVerifying()
+                ->withHeaders([
+                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ])
+                ->timeout(15)
+                ->post("{$this->baseUrl}/v6.1/request_pickup", $payload);
+        } catch (\Throwable $e) {
+            throw new \Exception('Gagal menghubungi server API KiriminAja: ' . $e->getMessage());
+        }
+
+        $json = $response->json() ?? [];
+
+        if (!$response->successful() || !($json['status'] ?? false)) {
+            $errMsg = $json['text'] ?? $json['message'] ?? null;
+            if (empty($errMsg)) {
+                $errMsg = 'Permintaan request pickup ditolak oleh KiriminAja (HTTP ' . $response->status() . ').';
+            }
+            if (!empty($json['your_ip'])) {
+                $errMsg .= ' [IP Server: ' . $json['your_ip'] . ' belum di-whitelist di KiriminAja]';
+            }
+            throw new \Exception($errMsg);
+        }
+
+        $pickupNumber = $json['pickup_number'] ?? ($json['data']['pickup_number'] ?? null);
+        $details = $json['details'] ?? ($json['data']['details'] ?? ($json['data'] ?? []));
+
+        $awb = null;
+        if (!empty($details) && is_array($details)) {
+            if (isset($details[0]['awb']) && !empty($details[0]['awb'])) {
+                $awb = $details[0]['awb'];
+            } elseif (isset($details['awb']) && !empty($details['awb'])) {
+                $awb = $details['awb'];
             }
         }
 
-        $prefix = strtoupper($shipment->courier_code);
-        $generatedAwb = $prefix . date('ymd') . rand(100000, 999999) . 'ID';
-        $bookingId = 'KA-BKG-' . rand(100000, 999999);
+        if (empty($awb)) {
+            $awb = $pickupNumber ?? ($json['awb'] ?? ($json['data']['awb'] ?? null));
+        }
+
+        $bookingId = $pickupNumber ?? ($details[0]['booking_id'] ?? ('KA-' . $order->order_number));
+        $finalAwb = $awb ?: $bookingId;
 
         $shipment->update([
             'booking_id' => $bookingId,
-            'waybill_number' => $generatedAwb,
+            'waybill_number' => $finalAwb,
             'status' => 'picked_up',
             'pickup_scheduled_at' => now(),
             'shipped_at' => now(),
-            'tracking_history' => $this->getInitialTrackingCheckpoints($generatedAwb, $shipment->courier_name),
+            'kiriminaja_response' => $json,
+            'tracking_history' => $this->getInitialTrackingCheckpoints($finalAwb, $shipment->courier_name),
         ]);
 
         $order->update([
@@ -178,18 +207,53 @@ class KiriminAjaService
 
         return [
             'success' => true,
-            'waybill_number' => $generatedAwb,
+            'waybill_number' => $finalAwb,
             'booking_id' => $bookingId,
-            'message' => 'Sukses request pickup kurir KiriminAja.',
+            'message' => 'Sukses request pickup kurir KiriminAja (Pickup No: ' . $bookingId . ', Resi AWB: ' . $finalAwb . ').',
         ];
     }
 
-    public function getTracking(string $waybillNumber, string $courierCode): array
+    public function getTracking(string $waybillNumber, string $courierCode, ?string $orderNumber = null): array
     {
         $shipment = Shipment::where('waybill_number', $waybillNumber)->first();
 
         if ($shipment && !empty($shipment->tracking_history)) {
             return $shipment->tracking_history;
+        }
+
+        if (!empty($this->apiKey) && !empty($orderNumber)) {
+            try {
+                $response = Http::withoutVerifying()
+                    ->withHeaders([
+                        'Authorization' => 'Bearer ' . $this->apiKey,
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/json',
+                    ])
+                    ->timeout(8)
+                    ->post("{$this->baseUrl}/tracking", [
+                        'order_id' => $orderNumber,
+                    ]);
+
+                if ($response->successful()) {
+                    $json = $response->json();
+                    if (($json['status'] ?? false) && !empty($json['histories'])) {
+                        $checkpoints = [];
+                        foreach ($json['histories'] as $history) {
+                            $checkpoints[] = [
+                                'time' => $history['created_at'] ?? now()->format('d M Y, H:i') . ' WIB',
+                                'status' => $history['status'] ?? 'ON_PROCESS',
+                                'note' => $history['note'] ?? 'Status terkini pengiriman.',
+                                'location' => $history['city'] ?? '',
+                            ];
+                        }
+                        if ($shipment && !empty($checkpoints)) {
+                            $shipment->update(['tracking_history' => $checkpoints]);
+                        }
+                        return $checkpoints;
+                    }
+                }
+            } catch (\Throwable $e) {
+            }
         }
 
         return $this->getInitialTrackingCheckpoints($waybillNumber, strtoupper($courierCode));
@@ -286,14 +350,31 @@ class KiriminAjaService
                 }
             }
 
-            $blockedText = $json['text'] ?? $json['message'] ?? 'Gagal terhubung ke API KiriminAja (Status ' . $response->status() . ').';
+            $blockedText = $json['text'] ?? $json['message'] ?? null;
             $detectedIp = $json['your_ip'] ?? null;
+
+            if (!empty($detectedIp) || ($blockedText && str_contains(strtolower($blockedText), 'ip'))) {
+                return [
+                    'success' => false,
+                    'ip_blocked' => true,
+                    'your_ip' => $detectedIp,
+                    'message' => $blockedText ?: 'Alamat IP server belum terdaftar di whitelist KiriminAja.',
+                ];
+            }
+
+            if ($response->status() === 401) {
+                return [
+                    'success' => false,
+                    'message' => $blockedText ?: ('API Key ditolak (401 Unauthorized). Pastikan API Key valid dan sesuai dengan mode ' . strtoupper($this->mode) . ' (Production: app.kiriminaja.com, Sandbox: tdev.kiriminaja.com).'),
+                    'your_ip' => null,
+                ];
+            }
 
             return [
                 'success' => false,
-                'ip_blocked' => str_contains(strtolower($blockedText), 'ip') || !empty($detectedIp),
-                'your_ip' => $detectedIp,
-                'message' => $blockedText,
+                'ip_blocked' => false,
+                'your_ip' => null,
+                'message' => $blockedText ?: ('Gagal terhubung ke API KiriminAja (Status ' . $response->status() . ').'),
             ];
         } catch (\Throwable $e) {
             return [

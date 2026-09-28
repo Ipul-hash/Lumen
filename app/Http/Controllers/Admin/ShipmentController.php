@@ -52,7 +52,8 @@ class ShipmentController extends Controller
     {
         $tracking = $service->getTracking(
             $shipment->waybill_number ?? 'AWB-PENDING',
-            $shipment->courier_code
+            $shipment->courier_code,
+            $shipment->order->order_number ?? null
         );
 
         return response()->json([
@@ -133,7 +134,14 @@ class ShipmentController extends Controller
             if ($unpaidCount > 0) {
                 $msg .= " Catatan: {$unpaidCount} paket dilewati karena belum lunas.";
             }
+            if (!empty($errors)) {
+                $msg .= " Catatan kendala: " . implode('; ', $errors);
+            }
             return redirect()->back()->with('success', $msg);
+        }
+
+        if (!empty($errors)) {
+            return redirect()->back()->with('error', 'Gagal request pickup KiriminAja: ' . implode(' | ', $errors));
         }
 
         if ($unpaidCount > 0) {
