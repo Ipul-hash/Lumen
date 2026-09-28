@@ -13,6 +13,8 @@ class KiriminAjaService
     protected string $mode;
     protected string $baseUrl;
 
+    protected ?string $customProxy = null;
+
     public function __construct()
     {
         $this->apiKey = (string) StoreSetting::get('kiriminaja_api_key', env('KIRIMINAJA_API_KEY', ''));
@@ -22,10 +24,31 @@ class KiriminAjaService
             : 'https://tdev.kiriminaja.com/api/mitra';
     }
 
+    public function setApiKey(string $key): self
+    {
+        $this->apiKey = trim($key);
+        return $this;
+    }
+
+    public function setMode(string $mode): self
+    {
+        $this->mode = $mode === 'production' ? 'production' : 'sandbox';
+        $this->baseUrl = $this->mode === 'production'
+            ? 'https://client.kiriminaja.com/api/mitra'
+            : 'https://tdev.kiriminaja.com/api/mitra';
+        return $this;
+    }
+
+    public function setProxy(?string $proxy): self
+    {
+        $this->customProxy = $proxy ? trim($proxy) : null;
+        return $this;
+    }
+
     protected function client()
     {
         $client = Http::withoutVerifying();
-        $proxy = env('FIXIE_URL') ?: env('HTTP_PROXY') ?: StoreSetting::get('kiriminaja_proxy');
+        $proxy = $this->customProxy ?: (env('FIXIE_URL') ?: (env('HTTP_PROXY') ?: StoreSetting::get('kiriminaja_proxy')));
         if (!empty($proxy)) {
             $client = $client->withOptions(['proxy' => $proxy]);
         }
@@ -329,6 +352,31 @@ class KiriminAjaService
             ];
         }
 
+        $result = $this->pingSchedule($this->baseUrl);
+        if ($result['success']) {
+            return $result;
+        }
+
+        $altBaseUrl = $this->mode === 'production'
+            ? 'https://tdev.kiriminaja.com/api/mitra'
+            : 'https://client.kiriminaja.com/api/mitra';
+        $altModeName = $this->mode === 'production' ? 'Sandbox' : 'Production';
+
+        $altResult = $this->pingSchedule($altBaseUrl);
+        if ($altResult['success']) {
+            return [
+                'success' => true,
+                'message' => "Koneksi Berhasil di mode {$altModeName}! Harap ubah pilihan Mode Operasional API di form menjadi '{$altModeName}' lalu klik Simpan Semua Pengaturan.",
+                'your_ip' => $altResult['your_ip'] ?? null,
+                'suggested_mode' => strtolower($altModeName),
+            ];
+        }
+
+        return $result;
+    }
+
+    protected function pingSchedule(string $baseUrl): array
+    {
         try {
             $response = $this->client()
                 ->withHeaders([
@@ -337,7 +385,7 @@ class KiriminAjaService
                     'Content-Type' => 'application/json',
                 ])
                 ->timeout(8)
-                ->post("{$this->baseUrl}/v2/schedules");
+                ->post("{$baseUrl}/v2/schedules");
 
             $json = $response->json() ?? [];
 

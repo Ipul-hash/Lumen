@@ -338,12 +338,23 @@ if (btnTest) {
         btnTest.disabled = true;
         btnTest.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Menguji...';
         
+        const apiKey = document.getElementById('apiKeyInput')?.value;
+        const modeRadio = document.querySelector('input[name="kiriminaja_mode"]:checked');
+        const mode = modeRadio ? modeRadio.value : 'sandbox';
+        const proxyInput = document.querySelector('input[name="kiriminaja_proxy"]');
+        const proxy = proxyInput ? proxyInput.value : '';
+
         fetch('{{ route('admin.shipments.testConnection') }}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
+            },
+            body: JSON.stringify({
+                api_key: apiKey,
+                mode: mode,
+                proxy: proxy
+            })
         })
         .then(res => res.json())
         .then(data => {
@@ -351,6 +362,13 @@ if (btnTest) {
             btnTest.innerHTML = origHtml;
             
             if (data.success) {
+                if (data.suggested_mode) {
+                    const targetRadio = document.querySelector(`input[name="kiriminaja_mode"][value="${data.suggested_mode}"]`);
+                    if (targetRadio) {
+                        targetRadio.checked = true;
+                        targetRadio.dispatchEvent(new Event('change'));
+                    }
+                }
                 Swal.fire({
                     icon: 'success',
                     title: 'Koneksi Berhasil!',

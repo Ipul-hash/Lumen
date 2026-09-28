@@ -180,8 +180,18 @@ class ShipmentController extends Controller
         return view('admin.shipments.settings', compact('settings'));
     }
 
-    public function testConnection(KiriminAjaService $service)
+    public function testConnection(Request $request, KiriminAjaService $service)
     {
+        if ($request->filled('api_key')) {
+            $service->setApiKey((string)$request->api_key);
+        }
+        if ($request->filled('mode')) {
+            $service->setMode((string)$request->mode);
+        }
+        if ($request->has('proxy')) {
+            $service->setProxy($request->proxy);
+        }
+
         $result = $service->testConnection();
         return response()->json($result);
     }
