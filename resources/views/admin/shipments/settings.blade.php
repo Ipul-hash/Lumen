@@ -183,10 +183,13 @@
                         </div>
                     </div>
 
-                    <div class="mt-2">
-                        <button type="button" class="btn btn-light-primary w-100" id="btnTestKiriminAja">
+                    <div class="mt-2 d-flex gap-2">
+                        <button type="button" class="btn btn-light-primary flex-grow-1" id="btnTestKiriminAja">
                             <i class="ki-duotone ki-rocket fs-4 me-2"><span class="path1"></span><span class="path2"></span></i> Uji Koneksi KiriminAja
                         </button>
+                        <a href="{{ route('check-ip', ['test' => 1]) }}" target="_blank" class="btn btn-light-secondary" title="Buka data JSON diagnosa IP & koneksi">
+                            <i class="ki-duotone ki-magnifier fs-4 me-1"><span class="path1"></span><span class="path2"></span></i> Cek IP (JSON)
+                        </a>
                     </div>
                 </div>
             </div>

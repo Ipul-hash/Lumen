@@ -44,6 +44,34 @@ Route::post('/payments/{payment}/simulate-success', [CheckoutController::class, 
 Route::post('/midtrans/webhook', [CheckoutController::class, 'midtransWebhook'])->name('midtrans.webhook');
 Route::get('/checkout/{orderNumber}/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
+Route::get('/check-ip', function (\Illuminate\Http\Request $request, \App\Services\KiriminAjaService $service) {
+    $proxy = env('FIXIE_URL') ?: (env('HTTP_PROXY') ?: \App\Models\StoreSetting::get('kiriminaja_proxy'));
+    $client = \Illuminate\Support\Facades\Http::withoutVerifying()->timeout(6);
+    if (!empty($proxy)) {
+        $client = $client->withOptions(['proxy' => $proxy]);
+    }
+    $outboundIp = null;
+    try {
+        $ipRes = $client->get('https://api.ipify.org?format=json');
+        if ($ipRes->successful()) {
+            $outboundIp = $ipRes->json('ip');
+        }
+    } catch (\Throwable $e) {
+        $outboundIp = 'Error: ' . $e->getMessage();
+    }
+    $data = [
+        'status' => 'success',
+        'server_outbound_ip' => $outboundIp,
+        'proxy_configured' => !empty($proxy),
+        'environment' => \App\Models\StoreSetting::get('kiriminaja_mode', 'sandbox'),
+        'timestamp' => now()->timezone('Asia/Jakarta')->toDateTimeString() . ' WIB',
+    ];
+    if ($request->has('test')) {
+        $data['kiriminaja_test'] = $service->testConnection();
+    }
+    return response()->json($data, 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+})->name('check-ip');
+
 Route::get('/login', function () {
     return redirect()->route('admin.login');
 })->name('login');
