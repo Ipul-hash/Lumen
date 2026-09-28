@@ -18,7 +18,7 @@ class KiriminAjaService
     public function __construct()
     {
         $this->apiKey = (string) StoreSetting::get('kiriminaja_api_key', env('KIRIMINAJA_API_KEY', ''));
-        $this->mode = (string) StoreSetting::get('kiriminaja_mode', env('KIRIMINAJA_MODE', 'staging'));
+        $this->mode = (string) StoreSetting::get('kiriminaja_mode', env('KIRIMINAJA_MODE', 'sandbox'));
         $this->baseUrl = $this->mode === 'production' 
             ? 'https://client.kiriminaja.com/api/mitra' 
             : 'https://tdev.kiriminaja.com/api/mitra';
@@ -353,25 +353,10 @@ class KiriminAjaService
         }
 
         $result = $this->pingSchedule($this->baseUrl);
+        $modeLabel = $this->mode === 'production' ? 'Production' : 'Sandbox';
         if ($result['success']) {
-            return $result;
+            $result['message'] = "Koneksi KiriminAja ({$modeLabel}) Berhasil! Akun dan API Key terhubung lancar.";
         }
-
-        $altBaseUrl = $this->mode === 'production'
-            ? 'https://tdev.kiriminaja.com/api/mitra'
-            : 'https://client.kiriminaja.com/api/mitra';
-        $altModeName = $this->mode === 'production' ? 'Sandbox' : 'Production';
-
-        $altResult = $this->pingSchedule($altBaseUrl);
-        if ($altResult['success']) {
-            return [
-                'success' => true,
-                'message' => "Koneksi Berhasil di mode {$altModeName}! Harap ubah pilihan Mode Operasional API di form menjadi '{$altModeName}' lalu klik Simpan Semua Pengaturan.",
-                'your_ip' => $altResult['your_ip'] ?? null,
-                'suggested_mode' => strtolower($altModeName),
-            ];
-        }
-
         return $result;
     }
 

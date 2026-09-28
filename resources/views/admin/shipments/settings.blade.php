@@ -393,13 +393,6 @@ if (btnTest) {
             btnTest.innerHTML = origHtml;
             
             if (data.success) {
-                if (data.suggested_mode) {
-                    const targetRadio = document.querySelector(`input[name="kiriminaja_mode"][value="${data.suggested_mode}"]`);
-                    if (targetRadio) {
-                        targetRadio.checked = true;
-                        targetRadio.dispatchEvent(new Event('change'));
-                    }
-                }
                 Swal.fire({
                     icon: 'success',
                     title: 'Koneksi Berhasil!',
