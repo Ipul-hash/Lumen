@@ -348,6 +348,7 @@ if (btnTest) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json',
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
@@ -356,8 +357,38 @@ if (btnTest) {
                 proxy: proxy
             })
         })
-        .then(res => res.json())
+        .then(async res => {
+            if (res.status === 401 || res.status === 419 || res.redirected) {
+                btnTest.disabled = false;
+                btnTest.innerHTML = origHtml;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Sesi Telah Berakhir',
+                    text: 'Sesi login Anda telah habis karena tidak ada aktivitas. Halaman akan dimuat ulang untuk login kembali.',
+                    confirmButtonText: 'Login Ulang'
+                }).then(() => {
+                    window.location.reload();
+                });
+                return null;
+            }
+            const contentType = res.headers.get('content-type') || '';
+            if (!contentType.includes('application/json')) {
+                btnTest.disabled = false;
+                btnTest.innerHTML = origHtml;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Sesi Kedaluwarsa',
+                    text: 'Koneksi ke portal terputus. Silakan refresh halaman dan coba kembali.',
+                    confirmButtonText: 'Refresh'
+                }).then(() => {
+                    window.location.reload();
+                });
+                return null;
+            }
+            return res.json();
+        })
         .then(data => {
+            if (!data) return;
             btnTest.disabled = false;
             btnTest.innerHTML = origHtml;
             
@@ -405,7 +436,7 @@ if (btnTest) {
             Swal.fire({
                 icon: 'error',
                 title: 'Kesalahan Sistem',
-                text: 'Gagal request ke server lokal: ' + err.message,
+                text: 'Gagal menghubungi server: ' + err.message,
                 confirmButtonText: 'Tutup'
             });
         });
