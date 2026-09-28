@@ -168,9 +168,9 @@
                                                     {{ $order->shipment->waybill_number }}
                                                 </span>
                                             @elseif(!$order->isPaid())
-                                                <span class="badge badge-light-danger fw-bold fs-9 py-0 px-2 w-fit mt-1">Belum Lunas (Terkunci)</span>
+                                                <span class="badge badge-light-warning fw-bold fs-9 py-0 px-2 w-fit mt-1">Menunggu Pembayaran</span>
                                             @else
-                                                <span class="badge badge-light-warning fw-bold fs-9 py-0 px-2 w-fit mt-1">Siap Request Pickup</span>
+                                                <span class="badge badge-light-primary fw-bold fs-9 py-0 px-2 w-fit mt-1">Siap Request Pickup</span>
                                             @endif
                                         </div>
                                     @else
@@ -194,18 +194,13 @@
                                     <div class="d-flex justify-content-end gap-1">
                                         @if($order->shipment && !$order->shipment->hasWaybill())
                                             @if($order->isPaid())
-                                            <form action="{{ route('admin.orders.requestPickup', $order) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim pesanan ini ke KiriminAja untuk request pickup kurir?')">
+                                            <form action="{{ route('admin.orders.requestPickup', $order) }}" method="POST" class="d-inline" onsubmit="return confirm('Kirim data ke KiriminAja dan terbitkan resi penjemputan kurir?')">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-light-warning px-3 py-1 fs-8 fw-bold" title="Request Pickup Kurir">
+                                                <button type="submit" class="btn btn-sm btn-primary px-3 py-1 fs-8 fw-bold" title="Request Pickup Kurir">
                                                     <i class="ki-duotone ki-delivery-door fs-6 me-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></i>
                                                     Pickup
                                                 </button>
                                             </form>
-                                            @else
-                                            <button type="button" class="btn btn-sm btn-light-danger px-2 py-1 fs-9 fw-bold" disabled title="Pesanan belum lunas, tidak dapat dikirim">
-                                                <i class="ki-duotone ki-lock fs-7 text-danger me-1"><span class="path1"></span><span class="path2"></span></i>
-                                                Terkunci
-                                            </button>
                                             @endif
                                         @endif
                                         <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-icon btn-light-primary">

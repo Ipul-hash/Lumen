@@ -119,11 +119,11 @@ class PaymentService
         $order = $payment->order;
         if ($order) {
             $order->update([
-                'status' => 'paid',
+                'status' => 'processing',
                 'paid_at' => now(),
             ]);
 
-            if ($order->shipment && $order->shipment->status === 'cancelled') {
+            if ($order->shipment && in_array($order->shipment->status, ['cancelled', 'pending_pickup'])) {
                 $order->shipment->update([
                     'status' => 'pending_pickup',
                 ]);

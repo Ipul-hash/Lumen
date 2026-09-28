@@ -89,6 +89,10 @@ class Order extends Model
 
     public function isPaid(): bool
     {
+        if (in_array($this->status, ['paid', 'processing', 'shipped', 'completed'])) {
+            return true;
+        }
+
         if ($this->paid_at !== null) {
             return true;
         }

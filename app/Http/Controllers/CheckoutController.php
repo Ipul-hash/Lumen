@@ -204,20 +204,14 @@ class CheckoutController extends Controller
         return view('shop.payment', compact('order', 'payment', 'instructions', 'clientKey', 'snapJsUrl', 'snapToken'));
     }
 
-    public function simulateSuccess(Payment $payment, PaymentService $paymentService, KiriminAjaService $kiriminAja)
+    public function simulateSuccess(Payment $payment, PaymentService $paymentService)
     {
         $paymentService->settlePayment($payment);
 
         $order = $payment->order;
-        if ($order && $order->shipment && !$order->shipment->hasWaybill()) {
-            try {
-                $kiriminAja->requestPickup($order);
-            } catch (\Exception $e) {
-            }
-        }
 
         return redirect()->route('checkout.success', $order->order_number)
-            ->with('success', 'Pembayaran berhasil diverifikasi secara real-time! Paket Anda telah diteruskan ke logistik KiriminAja.');
+            ->with('success', 'Pembayaran berhasil diverifikasi secara real-time! Pesanan Anda sedang dipersiapkan dan dikemas oleh toko.');
     }
 
     public function midtransWebhook(Request $request, PaymentService $paymentService)

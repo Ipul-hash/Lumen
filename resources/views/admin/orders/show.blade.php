@@ -21,16 +21,11 @@
             </ul>
         </div>
         <div class="d-flex align-items-center gap-2 gap-lg-3">
-            @if($order->isPaid())
+            @if($order->shipment && $order->shipment->hasWaybill())
             <a href="{{ route('admin.orders.shippingLabel', $order) }}" target="_blank" class="btn btn-sm fw-bold btn-light-primary">
                 <i class="ki-duotone ki-printer fs-5 me-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span></i>
                 Cetak Label Resi Thermal
             </a>
-            @else
-            <button type="button" class="btn btn-sm fw-bold btn-light-danger opacity-75" disabled title="Pesanan belum lunas. Pembayaran harus diverifikasi terlebih dahulu.">
-                <i class="ki-duotone ki-lock fs-5 me-1 text-danger"><span class="path1"></span><span class="path2"></span></i>
-                Resi Terkunci (Belum Lunas)
-            </button>
             @endif
             <a href="{{ route('admin.orders.invoice', $order) }}" target="_blank" class="btn btn-sm fw-bold btn-light-info">
                 <i class="ki-duotone ki-document fs-5 me-1"><span class="path1"></span><span class="path2"></span></i>
@@ -222,12 +217,12 @@
                         </div>
 
                         @if(!$order->isPaid())
-                        <div class="bg-light-danger border border-danger border-dashed rounded p-4 d-flex flex-column flex-md-row flex-stack gap-3">
+                        <div class="bg-light-warning border border-warning border-dashed rounded p-4 d-flex flex-column flex-md-row flex-stack gap-3">
                             <div class="d-flex align-items-center">
-                                <i class="ki-duotone ki-information fs-2hx text-danger me-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+                                <i class="ki-duotone ki-information fs-2hx text-warning me-3"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
                                 <div>
-                                    <span class="fw-bold text-gray-900 d-block fs-7">Pengiriman Terkunci: Menunggu Pembayaran</span>
-                                    <span class="text-muted fs-8">Pesanan ini belum lunas. Tombol request pickup KiriminAja dinonaktifkan sampai pembayaran terverifikasi.</span>
+                                    <span class="fw-bold text-gray-900 d-block fs-7">Menunggu Pembayaran Pelanggan</span>
+                                    <span class="text-muted fs-8">Pesanan ini belum lunas. Tombol request pickup KiriminAja akan aktif setelah pembayaran diverifikasi.</span>
                                 </div>
                             </div>
                             <form action="{{ route('admin.orders.confirmPayment', $order) }}" method="POST">
@@ -292,15 +287,15 @@
                                     <option value="paid" {{ $order->status === 'paid' ? 'selected' : '' }}>Sudah Dibayar (Paid)</option>
                                     <option value="processing" {{ $order->status === 'processing' ? 'selected' : '' }}>Sedang Diproses (Packaging)</option>
                                     <option value="shipped" {{ $order->status === 'shipped' ? 'selected' : '' }} {{ !$order->isPaid() ? 'disabled' : '' }}>
-                                        Sedang Dikirim {{ !$order->isPaid() ? '(Terkunci: Belum Lunas)' : '' }}
+                                        Sedang Dikirim {{ !$order->isPaid() ? '(Perlu Pembayaran)' : '' }}
                                     </option>
                                     <option value="completed" {{ $order->status === 'completed' ? 'selected' : '' }} {{ !$order->isPaid() ? 'disabled' : '' }}>
-                                        Pesanan Selesai {{ !$order->isPaid() ? '(Terkunci: Belum Lunas)' : '' }}
+                                        Pesanan Selesai {{ !$order->isPaid() ? '(Perlu Pembayaran)' : '' }}
                                     </option>
                                     <option value="cancelled" {{ $order->status === 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
                                 </select>
                                 @if(!$order->isPaid())
-                                <div class="fs-8 text-danger mt-1">Status pengiriman terkunci sampai pesanan terverifikasi lunas.</div>
+                                <div class="fs-8 text-warning mt-1">Status pengiriman aktif setelah pesanan terverifikasi lunas.</div>
                                 @endif
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Update Status</button>

@@ -182,9 +182,8 @@
                                     </td>
                                     <td>
                                         @if(!$shipment->order || !$shipment->order->isPaid())
-                                            <span class="badge badge-light-danger fw-bold fs-8">
-                                                <i class="ki-duotone ki-lock fs-8 me-1 text-danger"><span class="path1"></span><span class="path2"></span></i>
-                                                Belum Lunas (Terkunci)
+                                            <span class="badge badge-light-warning fw-bold fs-8">
+                                                Menunggu Pembayaran
                                             </span>
                                         @elseif($shipment->status === 'delivered')
                                             <span class="badge badge-light-success fw-bold fs-8">{{ $shipment->status_label }}</span>
@@ -204,12 +203,11 @@
                                                 <i class="ki-duotone ki-printer fs-5"><span class="path1"></span><span class="path2"></span></i>
                                             </a>
                                             @elseif(!$shipment->order || !$shipment->order->isPaid())
-                                            <a href="{{ route('admin.orders.show', $shipment->order) }}" class="btn btn-sm btn-light-danger px-3 py-1 fs-8 fw-bold" title="Pesanan belum lunas, buka untuk verifikasi pembayaran">
-                                                <i class="ki-duotone ki-lock fs-7 text-danger me-1"><span class="path1"></span><span class="path2"></span></i>
-                                                Terkunci
+                                            <a href="{{ route('admin.orders.show', $shipment->order) }}" class="btn btn-sm btn-light-warning px-3 py-1 fs-8 fw-bold" title="Pesanan belum lunas, buka untuk verifikasi pembayaran">
+                                                Menunggu Bayar
                                             </a>
                                             @else
-                                            <button type="submit" form="form-pickup-{{ $shipment->id }}" class="btn btn-sm btn-warning px-3 py-1 fs-8 fw-bold" data-confirm="Request pickup ekspedisi untuk order {{ $shipment->order->order_number ?? '' }}?" data-confirm-title="Request Pickup">
+                                            <button type="submit" form="form-pickup-{{ $shipment->id }}" class="btn btn-sm btn-primary px-3 py-1 fs-8 fw-bold" data-confirm="Request pickup ekspedisi untuk order {{ $shipment->order->order_number ?? '' }}?" data-confirm-title="Request Pickup">
                                                 Pickup
                                             </button>
                                             @endif
