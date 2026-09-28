@@ -65,12 +65,81 @@ Route::get('/check-ip', function (\Illuminate\Http\Request $request, \App\Servic
         'proxy_configured' => !empty($proxy),
         'environment' => \App\Models\StoreSetting::get('kiriminaja_mode', 'sandbox'),
         'timestamp' => now()->timezone('Asia/Jakarta')->toDateTimeString() . ' WIB',
+        'debug_endpoint' => url('/debug-kiriminaja'),
     ];
     if ($request->has('test')) {
         $data['kiriminaja_test'] = $service->testConnection();
     }
     return response()->json($data, 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 })->name('check-ip');
+
+Route::get('/debug-kiriminaja', function () {
+    $apiKey = (string) \App\Models\StoreSetting::get('kiriminaja_api_key', env('KIRIMINAJA_API_KEY', ''));
+    $proxy = env('FIXIE_URL') ?: (env('HTTP_PROXY') ?: \App\Models\StoreSetting::get('kiriminaja_proxy'));
+    $client = \Illuminate\Support\Facades\Http::withoutVerifying()->timeout(10);
+    if (!empty($proxy)) {
+        $client = $client->withOptions(['proxy' => $proxy]);
+    }
+    $ipifyOutbound = null;
+    try {
+        $ipRes = $client->get('https://api.ipify.org?format=json');
+        if ($ipRes->successful()) {
+            $ipifyOutbound = $ipRes->json('ip');
+        }
+    } catch (\Throwable $e) {
+        $ipifyOutbound = 'Error: ' . $e->getMessage();
+    }
+    $kaUrl = 'https://tdev.kiriminaja.com/api/mitra/v2/shipping_price';
+    $kaStatus = null;
+    $kaBody = null;
+    $kaJson = null;
+    $kaDetectedIp = null;
+    $errorException = null;
+    try {
+        $res = $client->withHeaders([
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ])->post($kaUrl, [
+            'origin' => 2105,
+            'destination' => 2108,
+            'weight' => 1000,
+            'courier' => ['jne'],
+        ]);
+        $kaStatus = $res->status();
+        $kaBody = $res->body();
+        $kaJson = $res->json();
+        $kaDetectedIp = $kaJson['your_ip'] ?? null;
+    } catch (\Throwable $e) {
+        $errorException = $e->getMessage();
+    }
+    $dashboardWhitelistedIp = '74.220.52.132';
+    $isMatching = ($kaDetectedIp === $dashboardWhitelistedIp);
+    if ($kaDetectedIp) {
+        if ($isMatching) {
+            $conclusion = "IP yang terbaca oleh KiriminAja ({$kaDetectedIp}) SAMA PERSIS dengan IP ({$dashboardWhitelistedIp}) di dashboard KiriminAja. Artinya Render konsisten menggunakan IP tersebut, dan error ini disebabkan oleh keterlambatan sinkronisasi / cache internal KiriminAja.";
+        } else {
+            $conclusion = "IP yang terbaca oleh KiriminAja ({$kaDetectedIp}) BERBEDA dari IP ({$dashboardWhitelistedIp}) di dashboard KiriminAja. Artinya Render memakai IP outbound lain dari pool jaringannya. Masukkan IP ({$kaDetectedIp}) ke dashboard KiriminAja.";
+        }
+    } else {
+        $conclusion = "Tidak ada field your_ip dalam respon KiriminAja. Periksa raw_response di bawah.";
+    }
+    return response()->json([
+        'status' => 'success',
+        'timestamp' => now()->timezone('Asia/Jakarta')->toDateTimeString() . ' WIB',
+        'server_outbound_ip_via_ipify' => $ipifyOutbound,
+        'kiriminaja_detected_ip' => $kaDetectedIp,
+        'dashboard_whitelisted_ip' => $dashboardWhitelistedIp,
+        'is_matching' => $isMatching,
+        'conclusion' => $conclusion,
+        'proxy_used' => !empty($proxy) ? $proxy : null,
+        'kiriminaja_target_url' => $kaUrl,
+        'kiriminaja_http_status' => $kaStatus,
+        'kiriminaja_raw_json' => $kaJson,
+        'kiriminaja_raw_body' => $kaBody,
+        'exception_if_any' => $errorException,
+    ], 200, [], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+})->name('debug-kiriminaja');
 
 Route::get('/login', function () {
     return redirect()->route('admin.login');
