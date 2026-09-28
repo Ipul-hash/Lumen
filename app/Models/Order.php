@@ -77,6 +77,16 @@ class Order extends Model
         return $this->hasOne(Shipment::class);
     }
 
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class);
+    }
+
+    public function latestRefund(): HasOne
+    {
+        return $this->hasOne(Refund::class)->latestOfMany();
+    }
+
     public function isPaid(): bool
     {
         if ($this->paid_at !== null) {

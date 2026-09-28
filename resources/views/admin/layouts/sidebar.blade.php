@@ -99,6 +99,26 @@
                         </a>
                     </div>
 
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('admin.refunds.*') ? 'active' : '' }}" href="{{ route('admin.refunds.index') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-wallet fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                    <span class="path3"></span>
+                                    <span class="path4"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Pengembalian Dana</span>
+                            @php
+                                $pendingRefunds = \App\Models\Refund::where('status', 'pending')->count();
+                            @endphp
+                            @if($pendingRefunds > 0)
+                                <span class="badge badge-light-danger badge-circle fw-bold fs-7">{{ $pendingRefunds }}</span>
+                            @endif
+                        </a>
+                    </div>
+
                     <div class="menu-item pt-5">
                         <div class="menu-content">
                             <span class="menu-heading fw-bold text-uppercase fs-7 text-gray-500">Logistik KiriminAja</span>

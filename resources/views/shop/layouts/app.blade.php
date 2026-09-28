@@ -690,6 +690,9 @@
             <a href="{{ route('shop.track') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">
                 <i class="bi bi-geo-alt me-2 text-primary"></i> Lacak Resi Pengiriman
             </a>
+            <a href="{{ route('refund.create') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">
+                <i class="bi bi-arrow-counterclockwise me-2 text-danger"></i> Pengajuan Pengembalian Dana
+            </a>
         </div>
         <div class="p-4 border-top bg-light">
             <a href="{{ route('admin.dashboard') }}" class="btn btn-dark w-100 rounded-0 py-2 fw-semibold fs-7 mb-2">
@@ -792,8 +795,9 @@
                 <ul class="list-unstyled fs-7 d-flex flex-column gap-2">
                     <li><a href="{{ route('shop.formulaCalculator') }}">Kalkulator Formula Mixer</a></li>
                     <li><a href="{{ route('shop.track') }}">Lacak Pengiriman KiriminAja</a></li>
+                    <li><a href="{{ route('refund.create') }}">Pengajuan Pengembalian Dana</a></li>
+                    <li><a href="{{ route('refund.track') }}">Lacak Status Refund</a></li>
                     <li><a href="{{ route('shop.shadeGuide') }}">Cara Memilih Developer</a></li>
-                    <li><a href="{{ route('shop.shadeGuide') }}">Panduan Tes Alergi Kulit</a></li>
                     <li><a href="{{ route('admin.dashboard') }}">Login Dashboard Admin</a></li>
                 </ul>
             </div>

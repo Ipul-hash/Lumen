@@ -94,6 +94,13 @@
                                     <p class="fs-7 mb-0">Paket sedang dipersiapkan di warehouse Kebayoran Baru, Jakarta Selatan. Nomor resi KiriminAja akan segera aktif setelah kurir melakukan scanning pickup.</p>
                                 </div>
                             @endif
+
+                            <div class="mt-4 pt-3 border-top d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                <span class="fs-8 text-muted">Paket mengalami kerusakan atau varian warna tidak cocok?</span>
+                                <a href="{{ route('refund.create', ['order' => $order->order_number]) }}" class="btn btn-sm btn-outline-dark rounded-pill fs-8 fw-semibold">
+                                    <i class="bi bi-arrow-counterclockwise me-1 text-danger"></i> Ajukan Pengembalian Dana / Retur
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

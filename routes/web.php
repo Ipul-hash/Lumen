@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ShipmentController;
+use App\Http\Controllers\Admin\RefundController as AdminRefundController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FormulaCalculatorController;
+use App\Http\Controllers\RefundController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,11 @@ Route::get('/shade-guide', [ShopController::class, 'shadeGuide'])->name('shop.sh
 Route::get('/formula-calculator', [FormulaCalculatorController::class, 'index'])->name('shop.formulaCalculator');
 Route::post('/formula-calculator/calculate', [FormulaCalculatorController::class, 'calculate'])->name('shop.formulaCalculator.calculate');
 Route::get('/track', [ShopController::class, 'trackOrder'])->name('shop.track');
+Route::get('/refund/request', [RefundController::class, 'create'])->name('refund.create');
+Route::get('/refund/lookup-order', [RefundController::class, 'lookupOrder'])->name('refund.lookupOrder');
+Route::post('/refund/request', [RefundController::class, 'store'])->name('refund.store');
+Route::get('/refund/track', [RefundController::class, 'track'])->name('refund.track');
+Route::get('/refund/{refundNumber}/success', [RefundController::class, 'success'])->name('refund.success');
 
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::get('/cart/drawer', [CartController::class, 'drawerData'])->name('cart.drawer');
@@ -64,4 +71,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('shipments/test-connection', [ShipmentController::class, 'testConnection'])->name('shipments.testConnection');
     Route::post('shipments/batch-pickup', [ShipmentController::class, 'batchPickup'])->name('shipments.batchPickup');
     Route::get('shipments/{shipment}/track', [ShipmentController::class, 'track'])->name('shipments.track');
+
+    Route::get('refunds', [AdminRefundController::class, 'index'])->name('refunds.index');
+    Route::get('refunds/{refund}', [AdminRefundController::class, 'show'])->name('refunds.show');
+    Route::post('refunds/{refund}/approve', [AdminRefundController::class, 'approve'])->name('refunds.approve');
+    Route::post('refunds/{refund}/reject', [AdminRefundController::class, 'reject'])->name('refunds.reject');
+    Route::post('refunds/{refund}/disburse', [AdminRefundController::class, 'disburse'])->name('refunds.disburse');
 });
