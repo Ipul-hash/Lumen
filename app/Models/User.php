@@ -34,9 +34,37 @@ class User extends Authenticatable
         ];
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'superadmin']);
+    }
+
+    public function canManageUsers(): bool
+    {
+        return $this->role === 'superadmin';
+    }
+
+    public function getRoleLabelAttribute(): string
+    {
+        return match ($this->role) {
+            'superadmin' => 'Superadmin',
+            'admin' => 'Admin Biasa',
+            default => 'Pelanggan',
+        };
+    }
+
+    public function getRoleBadgeClassAttribute(): string
+    {
+        return match ($this->role) {
+            'superadmin' => 'badge-light-danger text-danger',
+            'admin' => 'badge-light-primary text-primary',
+            default => 'badge-light-dark text-dark',
+        };
     }
 
     public function addresses(): HasMany

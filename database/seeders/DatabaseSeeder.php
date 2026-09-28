@@ -41,10 +41,20 @@ class DatabaseSeeder extends Seeder
             StoreSetting::set($key, $value);
         }
 
+        $superadmin = User::updateOrCreate(
+            ['email' => 'superadmin@lumenhair.id'],
+            [
+                'name' => 'Super Admin LUMEN',
+                'phone' => '081299990001',
+                'password' => Hash::make('password123'),
+                'role' => 'superadmin',
+            ]
+        );
+
         $admin = User::updateOrCreate(
             ['email' => 'admin@lumenhair.id'],
             [
-                'name' => 'Admin Lumen Hair',
+                'name' => 'Admin Staff LUMEN',
                 'phone' => '081288990011',
                 'password' => Hash::make('password123'),
                 'role' => 'admin',

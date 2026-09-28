@@ -88,7 +88,9 @@
                                 <div class="d-flex flex-column">
                                     <div class="fw-bold d-flex align-items-center fs-5">
                                         {{ auth()->user()->name ?? 'Administrator' }}
-                                        <span class="badge badge-light-success fw-bold fs-8 px-2 py-1 ms-2">Admin</span>
+                                        <span class="badge {{ auth()->user()?->role_badge_class ?? 'badge-light-primary' }} fw-bold fs-8 px-2 py-1 ms-2">
+                                            {{ auth()->user()?->role_label ?? 'Admin' }}
+                                        </span>
                                     </div>
                                     <span class="fw-semibold text-muted text-hover-primary fs-7">
                                         {{ auth()->user()->email ?? 'admin@lumenhair.id' }}
@@ -103,9 +105,24 @@
                         <div class="menu-item px-5">
                             <a href="{{ route('admin.shipments.settings') }}" class="menu-link px-5">Pengaturan Ekspedisi</a>
                         </div>
+                        @if(auth()->user()?->isSuperAdmin())
+                        <div class="menu-item px-5">
+                            <a href="{{ route('admin.users.index') }}" class="menu-link px-5">Kelola Pengguna</a>
+                        </div>
+                        @endif
                         <div class="separator my-2"></div>
                         <div class="menu-item px-5">
                             <a href="{{ route('shop.index') }}" class="menu-link px-5">Kembali ke Toko</a>
+                        </div>
+                        <div class="separator my-2"></div>
+                        <div class="menu-item px-5">
+                            <form action="{{ route('admin.logout') }}" method="POST" id="kt_admin_logout_form">
+                                @csrf
+                                <button type="submit" class="menu-link px-5 w-100 border-0 bg-transparent text-start text-danger fs-7 fw-semibold">
+                                    <i class="ki-duotone ki-exit-right text-danger fs-5 me-2"><span class="path1"></span><span class="path2"></span></i>
+                                    Keluar / Logout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

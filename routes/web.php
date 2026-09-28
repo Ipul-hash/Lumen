@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\RefundController as AdminRefundController;
+use App\Http\Controllers\Admin\ShipmentController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FormulaCalculatorController;
@@ -42,7 +44,15 @@ Route::post('/payments/{payment}/simulate-success', [CheckoutController::class, 
 Route::post('/midtrans/webhook', [CheckoutController::class, 'midtransWebhook'])->name('midtrans.webhook');
 Route::get('/checkout/{orderNumber}/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::get('/login', function () {
+    return redirect()->route('admin.login');
+})->name('login');
+
+Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
+Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.submit');
+Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+Route::prefix('admin')->name('admin.')->middleware(['admin'])->group(function () {
     Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     });
@@ -77,4 +87,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('refunds/{refund}/approve', [AdminRefundController::class, 'approve'])->name('refunds.approve');
     Route::post('refunds/{refund}/reject', [AdminRefundController::class, 'reject'])->name('refunds.reject');
     Route::post('refunds/{refund}/disburse', [AdminRefundController::class, 'disburse'])->name('refunds.disburse');
+
+    Route::middleware(['superadmin'])->group(function () {
+        Route::resource('users', UserController::class);
+    });
 });

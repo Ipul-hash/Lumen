@@ -168,6 +168,27 @@
                         </a>
                     </div>
 
+                    @if(auth()->user()?->isSuperAdmin())
+                    <div class="menu-item pt-5">
+                        <div class="menu-content">
+                            <span class="menu-heading fw-bold text-uppercase fs-7 text-gray-500">Akses & Keamanan</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-item">
+                        <a class="menu-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
+                            <span class="menu-icon">
+                                <i class="ki-duotone ki-shield-tick fs-2">
+                                    <span class="path1"></span>
+                                    <span class="path2"></span>
+                                </i>
+                            </span>
+                            <span class="menu-title">Kelola User & Admin</span>
+                            <span class="badge badge-light-danger fw-bold fs-9 px-2 py-1 ms-1">Super</span>
+                        </a>
+                    </div>
+                    @endif
+
                 </div>
             </div>
         </div>

@@ -16,6 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'midtrans/webhook',
             'api/*',
         ]);
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'superadmin' => \App\Http\Middleware\SuperadminMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
