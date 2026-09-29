@@ -82,9 +82,18 @@
                             @forelse($products as $product)
                             <tr>
                                 <td>
-                                    <div class="d-flex flex-column">
-                                        <span class="text-gray-900 fw-bold fs-6">{{ $product->name }}</span>
-                                        <span class="text-muted fs-8">{{ Str::limit($product->summary, 45) }}</span>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="border rounded bg-light d-flex align-items-center justify-content-center overflow-hidden shadow-sm" style="width: 48px; height: 48px; flex-shrink: 0;">
+                                            @if($product->thumbnail_url)
+                                                <img src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                            @else
+                                                <i class="ki-duotone ki-picture fs-2 text-muted"><span class="path1"></span><span class="path2"></span></i>
+                                            @endif
+                                        </div>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-gray-900 fw-bold fs-6">{{ $product->name }}</span>
+                                            <span class="text-muted fs-8">{{ Str::limit($product->summary, 45) }}</span>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
@@ -98,9 +107,11 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex align-items-center gap-1 mb-1">
+                                    <div class="d-flex align-items-center gap-1 mb-1 flex-wrap">
                                         @foreach($product->variants as $variant)
-                                            @if($variant->color_code)
+                                            @if($variant->image_url)
+                                                <img src="{{ $variant->image_url }}" class="w-20px h-20px rounded-circle border border-2 border-white shadow-sm" style="object-fit: cover;" title="{{ $variant->name }} - {{ $variant->formatted_price }}" alt="{{ $variant->name }}">
+                                            @elseif($variant->color_code)
                                                 <span class="w-18px h-18px rounded-circle d-inline-block border border-2 border-white shadow-sm" style="background-color: {{ $variant->color_code }};" title="{{ $variant->color_name }} - {{ $variant->name }}"></span>
                                             @endif
                                         @endforeach

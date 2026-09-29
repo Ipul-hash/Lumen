@@ -31,7 +31,7 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <div id="kt_app_content_container" class="app-container container-fluid">
 
-        <form action="{{ route('admin.products.store') }}" method="POST">
+        <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="row g-5 g-xl-10">
@@ -53,12 +53,12 @@
 
                             <div class="fv-row mb-7">
                                 <label class="fs-6 fw-semibold mb-2">Deskripsi Lengkap & Manfaat</label>
-                                <textarea name="description" rows="5" class="form-control form-control-solid" placeholder="Penjelasan kandungan vegan, ketahanan warna, dan hasil akhir...">{{ old('description') }}</textarea>
+                                <textarea name="description" rows="5" class="form-control form-control-solid" placeholder="Penjelasan kandungan, keharuman, ketahanan aroma, dan hasil akhir...">{{ old('description') }}</textarea>
                             </div>
 
                             <div class="fv-row mb-7">
                                 <label class="fs-6 fw-semibold mb-2">Cara Pakai / Perawatan (Care Instructions)</label>
-                                <textarea name="care_instructions" rows="3" class="form-control form-control-solid" placeholder="Petunjuk pengaplikasian, waktu tunggu, dan cara keramas...">{{ old('care_instructions') }}</textarea>
+                                <textarea name="care_instructions" rows="3" class="form-control form-control-solid" placeholder="Petunjuk pengaplikasian, titik semprot nadi, atau cara pemakaian...">{{ old('care_instructions') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -66,8 +66,8 @@
                     <div class="card card-flush mb-5">
                         <div class="card-header pt-7 d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="card-title fw-bold text-gray-900 m-0">Varian Warna & Ukuran</h3>
-                                <div class="text-muted fs-8">Tambahkan pilihan warna cat, kode hex (swatch), ukuran, harga, dan stok</div>
+                                <h3 class="card-title fw-bold text-gray-900 m-0">Varian Produk & Foto</h3>
+                                <div class="text-muted fs-8">Tambahkan varian ukuran/warna beserta foto khusus untuk tiap varian</div>
                             </div>
                             <button type="button" class="btn btn-sm btn-light-primary fw-bold" id="btn-add-variant">
                                 <i class="ki-duotone ki-plus fs-6 me-1"></i> Tambah Varian
@@ -78,31 +78,31 @@
                                 <div class="variant-item border border-gray-300 rounded p-4 mb-4 bg-light-secondary position-relative">
                                     <div class="row g-3">
                                         <div class="col-md-4">
-                                            <label class="required fs-8 fw-semibold mb-1">Nama Varian Warna</label>
-                                            <input type="text" name="variants[0][name]" class="form-control form-control-sm form-control-solid" placeholder="Contoh: Ash Grey Titanium" value="Ash Grey Titanium" required />
+                                            <label class="required fs-8 fw-semibold mb-1">Nama Varian</label>
+                                            <input type="text" name="variants[0][name]" class="form-control form-control-sm form-control-solid" placeholder="Contoh: Signature Bottle 50ml" value="Signature Bottle 50ml" required />
                                         </div>
                                         <div class="col-md-3">
                                             <label class="required fs-8 fw-semibold mb-1">SKU Unik</label>
-                                            <input type="text" name="variants[0][sku]" class="form-control form-control-sm form-control-solid" placeholder="LMN-ASH-120" value="LMN-ASH-120" required />
+                                            <input type="text" name="variants[0][sku]" class="form-control form-control-sm form-control-solid" placeholder="LMN-VAR-01" value="LMN-VAR-01" required />
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="fs-8 fw-semibold mb-1">Nama Warna</label>
-                                            <input type="text" name="variants[0][color_name]" class="form-control form-control-sm form-control-solid" placeholder="Ash Grey" value="Ash Grey" />
+                                            <label class="fs-8 fw-semibold mb-1">Nama Warna / Varian</label>
+                                            <input type="text" name="variants[0][color_name]" class="form-control form-control-sm form-control-solid" placeholder="Golden Amber" value="Golden Amber" />
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="fs-8 fw-semibold mb-1">Warna (Hex)</label>
+                                            <label class="fs-8 fw-semibold mb-1">Warna / Tema (Hex)</label>
                                             <div class="d-flex align-items-center gap-2">
-                                                <input type="color" name="variants[0][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="#8D99AE" />
+                                                <input type="color" name="variants[0][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="#D4AF37" />
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <label class="fs-8 fw-semibold mb-1">Ukuran / Volume</label>
-                                            <input type="text" name="variants[0][size]" class="form-control form-control-sm form-control-solid" placeholder="120ml" value="120ml" />
+                                            <input type="text" name="variants[0][size]" class="form-control form-control-sm form-control-solid" placeholder="50ml" value="50ml" />
                                         </div>
                                         <div class="col-md-3">
                                             <label class="required fs-8 fw-semibold mb-1">Harga (Rp)</label>
-                                            <input type="number" name="variants[0][price]" class="form-control form-control-sm form-control-solid" placeholder="125000" value="125000" required />
+                                            <input type="number" name="variants[0][price]" class="form-control form-control-sm form-control-solid" placeholder="195000" value="195000" required />
                                         </div>
                                         <div class="col-md-3">
                                             <label class="fs-8 fw-semibold mb-1">Harga Coret (Promo)</label>
@@ -110,7 +110,23 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label class="required fs-8 fw-semibold mb-1">Stok Tersedia</label>
-                                            <input type="number" name="variants[0][stock]" class="form-control form-control-sm form-control-solid" placeholder="25" value="25" required />
+                                            <input type="number" name="variants[0][stock]" class="form-control form-control-sm form-control-solid" placeholder="30" value="30" required />
+                                        </div>
+
+                                        <div class="col-12 mt-2 pt-2 border-top border-gray-300">
+                                            <div class="row align-items-center g-2">
+                                                <div class="col-auto">
+                                                    <div class="variant-img-preview border rounded bg-white d-flex align-items-center justify-content-center overflow-hidden shadow-sm" style="width: 52px; height: 52px;">
+                                                        <i class="ki-duotone ki-picture fs-2 text-muted placeholder-icon"><span class="path1"></span><span class="path2"></span></i>
+                                                        <img src="" class="d-none w-100 h-100 preview-img" style="object-fit: cover;" alt="Preview">
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <label class="fs-8 fw-semibold mb-1 d-block text-gray-700">Foto Khusus Varian</label>
+                                                    <input type="file" name="variants[0][image]" class="form-control form-control-sm form-control-solid variant-file-input" accept="image/jpeg,image/png,image/jpg,image/webp,image/gif" />
+                                                    <div class="text-muted fs-9 mt-1">Upload foto khusus varian ini (JPG, PNG, WEBP max 5MB)</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -213,30 +229,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 </button>
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label class="required fs-8 fw-semibold mb-1">Nama Varian Warna</label>
-                        <input type="text" name="variants[${variantIndex}][name]" class="form-control form-control-sm form-control-solid" placeholder="Contoh: Rose Gold Pastel" required />
+                        <label class="required fs-8 fw-semibold mb-1">Nama Varian</label>
+                        <input type="text" name="variants[${variantIndex}][name]" class="form-control form-control-sm form-control-solid" placeholder="Contoh: Travel Spray 30ml" required />
                     </div>
                     <div class="col-md-3">
                         <label class="required fs-8 fw-semibold mb-1">SKU Unik</label>
                         <input type="text" name="variants[${variantIndex}][sku]" class="form-control form-control-sm form-control-solid" placeholder="LMN-VAR-${variantIndex}" required />
                     </div>
                     <div class="col-md-3">
-                        <label class="fs-8 fw-semibold mb-1">Nama Warna</label>
-                        <input type="text" name="variants[${variantIndex}][color_name]" class="form-control form-control-sm form-control-solid" placeholder="Rose Gold" />
+                        <label class="fs-8 fw-semibold mb-1">Nama Warna / Varian</label>
+                        <input type="text" name="variants[${variantIndex}][color_name]" class="form-control form-control-sm form-control-solid" placeholder="Rose Gold / Amber" />
                     </div>
                     <div class="col-md-2">
-                        <label class="fs-8 fw-semibold mb-1">Warna (Hex)</label>
+                        <label class="fs-8 fw-semibold mb-1">Warna / Tema (Hex)</label>
                         <div class="d-flex align-items-center gap-2">
-                            <input type="color" name="variants[${variantIndex}][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="#DDA7A5" />
+                            <input type="color" name="variants[${variantIndex}][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="#C49A6C" />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <label class="fs-8 fw-semibold mb-1">Ukuran / Volume</label>
-                        <input type="text" name="variants[${variantIndex}][size]" class="form-control form-control-sm form-control-solid" placeholder="120ml" value="120ml" />
+                        <input type="text" name="variants[${variantIndex}][size]" class="form-control form-control-sm form-control-solid" placeholder="30ml" value="30ml" />
                     </div>
                     <div class="col-md-3">
                         <label class="required fs-8 fw-semibold mb-1">Harga (Rp)</label>
-                        <input type="number" name="variants[${variantIndex}][price]" class="form-control form-control-sm form-control-solid" placeholder="125000" value="125000" required />
+                        <input type="number" name="variants[${variantIndex}][price]" class="form-control form-control-sm form-control-solid" placeholder="195000" value="195000" required />
                     </div>
                     <div class="col-md-3">
                         <label class="fs-8 fw-semibold mb-1">Harga Coret (Promo)</label>
@@ -245,6 +261,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="col-md-3">
                         <label class="required fs-8 fw-semibold mb-1">Stok Tersedia</label>
                         <input type="number" name="variants[${variantIndex}][stock]" class="form-control form-control-sm form-control-solid" placeholder="20" value="20" required />
+                    </div>
+
+                    <div class="col-12 mt-2 pt-2 border-top border-gray-300">
+                        <div class="row align-items-center g-2">
+                            <div class="col-auto">
+                                <div class="variant-img-preview border rounded bg-white d-flex align-items-center justify-content-center overflow-hidden shadow-sm" style="width: 52px; height: 52px;">
+                                    <i class="ki-duotone ki-picture fs-2 text-muted placeholder-icon"><span class="path1"></span><span class="path2"></span></i>
+                                    <img src="" class="d-none w-100 h-100 preview-img" style="object-fit: cover;" alt="Preview">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label class="fs-8 fw-semibold mb-1 d-block text-gray-700">Foto Khusus Varian</label>
+                                <input type="file" name="variants[${variantIndex}][image]" class="form-control form-control-sm form-control-solid variant-file-input" accept="image/jpeg,image/png,image/jpg,image/webp,image/gif" />
+                                <div class="text-muted fs-9 mt-1">Upload foto khusus varian ini (JPG, PNG, WEBP max 5MB)</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -260,6 +292,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.remove();
             } else {
                 window.showToast('warning', 'Minimal harus ada 1 varian produk.');
+            }
+        }
+    });
+
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('variant-file-input')) {
+            const file = e.target.files[0];
+            const item = e.target.closest('.variant-item');
+            if (!item) return;
+            const previewImg = item.querySelector('.preview-img');
+            const placeholderIcon = item.querySelector('.placeholder-icon');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    if (previewImg) {
+                        previewImg.src = evt.target.result;
+                        previewImg.classList.remove('d-none');
+                    }
+                    if (placeholderIcon) {
+                        placeholderIcon.classList.add('d-none');
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         }
     });

@@ -25,23 +25,39 @@
                     @php
                         $firstVariant = $product->activeVariants->first();
                         $hasColorCode = $firstVariant && $firstVariant->color_code;
+                        $initialImage = ($firstVariant && $firstVariant->image_url) 
+                            ? $firstVariant->image_url 
+                            : ($product->primaryImage 
+                                ? (str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path)) 
+                                : null);
                     @endphp
-                    @if($product->primaryImage)
-                        <img src="{{ str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path) }}" alt="{{ $product->name }}" id="mainProductImage" style="width: 100%; height: 100%; object-fit: cover;">
-                    @else
-                        <div id="mainSwatchBanner" class="w-100 h-100 d-flex flex-column align-items-center justify-content-center p-4 text-white" style="background: {{ $hasColorCode ? 'linear-gradient(135deg, ' . $firstVariant->color_code . ' 0%, #151515 100%)' : '#222' }};">
-                            <span class="fs-7 text-uppercase tracking-widest opacity-75">LUMEN Hair Color Atelier</span>
-                            <h2 class="display-6 font-serif fw-bold mt-2" id="heroVariantTitle">{{ $firstVariant->name ?? $product->name }}</h2>
-                            <p class="fs-7 opacity-75 mt-2" id="heroVariantColor">{{ $firstVariant->color_name ?? 'Formula Khusus' }}</p>
-                        </div>
-                    @endif
+                    <img src="{{ $initialImage ?? '' }}" alt="{{ $product->name }}" id="mainProductImage" style="width: 100%; height: 100%; object-fit: cover; {{ empty($initialImage) ? 'display: none;' : '' }}">
+                    <div id="mainSwatchBanner" class="w-100 h-100 d-flex flex-column align-items-center justify-content-center p-4 text-white" style="{{ !empty($initialImage) ? 'display: none !important;' : '' }} background: {{ $hasColorCode ? 'linear-gradient(135deg, ' . $firstVariant->color_code . ' 0%, #151515 100%)' : '#222' }};">
+                        <span class="fs-7 text-uppercase tracking-widest opacity-75">{{ $product->category->name ?? 'LUMEN Collection' }}</span>
+                        <h2 class="display-6 font-serif fw-bold mt-2" id="heroVariantTitle">{{ $firstVariant->name ?? $product->name }}</h2>
+                        <p class="fs-7 opacity-75 mt-2" id="heroVariantColor">{{ $firstVariant->color_name ?? 'Formula Khusus' }}</p>
+                    </div>
                 </div>
 
-                @if($product->images->count() > 1)
+                @php
+                    $galleryImages = collect();
+                    if ($product->images->isNotEmpty()) {
+                        foreach ($product->images as $img) {
+                            $galleryImages->push(str_starts_with($img->image_path, 'http') ? $img->image_path : asset('storage/' . $img->image_path));
+                        }
+                    }
+                    foreach ($product->variants as $v) {
+                        if ($v->image_url && !$galleryImages->contains($v->image_url)) {
+                            $galleryImages->push($v->image_url);
+                        }
+                    }
+                @endphp
+
+                @if($galleryImages->count() > 1)
                 <div class="d-flex gap-2 overflow-auto pb-2">
-                    @foreach($product->images as $img)
-                        <div class="border rounded-3 overflow-hidden shadow-sm" style="width: 70px; height: 70px; cursor: pointer; flex-shrink: 0;" onclick="document.getElementById('mainProductImage').src='{{ str_starts_with($img->image_path, 'http') ? $img->image_path : asset('storage/' . $img->image_path) }}'">
-                            <img src="{{ str_starts_with($img->image_path, 'http') ? $img->image_path : asset('storage/' . $img->image_path) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    @foreach($galleryImages as $gImg)
+                        <div class="border rounded-3 overflow-hidden shadow-sm" style="width: 70px; height: 70px; cursor: pointer; flex-shrink: 0;" onclick="const mImg = document.getElementById('mainProductImage'); if(mImg){ mImg.src='{{ $gImg }}'; mImg.style.display='block'; } const b = document.getElementById('mainSwatchBanner'); if(b){ b.style.setProperty('display', 'none', 'important'); }">
+                            <img src="{{ $gImg }}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                     @endforeach
                 </div>
@@ -72,7 +88,7 @@
 
                 <div class="border-top border-bottom py-4 mb-4">
                     <h6 class="text-uppercase fw-bold fs-7 tracking-wider mb-2">
-                        Pilihan Shade / Varian Warna:
+                        Pilihan Varian / Shade:
                         <span class="text-primary fw-normal ms-1" id="selectedVariantName">
                             {{ $firstVariant->color_name ?? $firstVariant->name ?? 'Default' }}
                         </span>
@@ -89,8 +105,13 @@
                                 data-price="{{ $variant->formatted_price }}"
                                 data-stock="{{ $variant->stock }}"
                                 data-weight="{{ $variant->effective_weight }}"
+                                data-image="{{ $variant->image_url ?? ($product->primaryImage ? (str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path)) : '') }}"
                                 title="{{ $variant->name }}">
-                                <span style="background-color: {{ $variant->color_code ?? '#444444' }};"></span>
+                                @if($variant->image_url)
+                                    <img src="{{ $variant->image_url }}" alt="{{ $variant->name }}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                @else
+                                    <span style="background-color: {{ $variant->color_code ?? '#444444' }};"></span>
+                                @endif
                             </button>
                         @endforeach
                     </div>
@@ -279,13 +300,29 @@ document.querySelectorAll('.variant-option-btn').forEach(btn => {
             document.getElementById('btnBuyNow').disabled = true;
         }
 
+        const mainImg = document.getElementById('mainProductImage');
         const banner = document.getElementById('mainSwatchBanner');
-        if (banner) {
-            banner.style.background = `linear-gradient(135deg, ${this.dataset.colorCode} 0%, #151515 100%)`;
-            const titleEl = document.getElementById('heroVariantTitle');
-            if (titleEl) titleEl.innerText = this.dataset.name;
-            const colorEl = document.getElementById('heroVariantColor');
-            if (colorEl) colorEl.innerText = this.dataset.colorName;
+        if (this.dataset.image) {
+            if (mainImg) {
+                mainImg.src = this.dataset.image;
+                mainImg.style.display = 'block';
+            }
+            if (banner) {
+                banner.style.setProperty('display', 'none', 'important');
+            }
+        } else {
+            if (mainImg) {
+                mainImg.style.display = 'none';
+            }
+            if (banner) {
+                banner.style.removeProperty('display');
+                banner.style.display = 'flex';
+                banner.style.background = `linear-gradient(135deg, ${this.dataset.colorCode} 0%, #151515 100%)`;
+                const titleEl = document.getElementById('heroVariantTitle');
+                if (titleEl) titleEl.innerText = this.dataset.name;
+                const colorEl = document.getElementById('heroVariantColor');
+                if (colorEl) colorEl.innerText = this.dataset.colorName;
+            }
         }
     });
 });

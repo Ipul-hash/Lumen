@@ -1,2 +1,6 @@
 *
 !.gitignore
+!variants/
+!variants/**
+!products/
+!products/**

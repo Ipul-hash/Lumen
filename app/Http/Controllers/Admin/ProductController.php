@@ -7,19 +7,20 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'variants']);
+        $query = Product::with(['category', 'variants', 'primaryImage']);
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('summary', 'like', "%{$search}%");
+                    ->orWhere('summary', 'like', "%{$search}%");
             });
         }
 
@@ -36,6 +37,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::where('is_active', true)->orderBy('name')->get();
+
         return view('admin.products.create', compact('categories'));
     }
 
@@ -67,6 +69,7 @@ class ProductController extends Controller
             'variants.*.discount_price' => 'nullable|numeric|min:0',
             'variants.*.stock' => 'required|integer|min:0',
             'variants.*.weight' => 'nullable|integer|min:1',
+            'variants.*.image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
         ]);
 
         if (empty($validated['slug'])) {
@@ -74,9 +77,9 @@ class ProductController extends Controller
         }
 
         $specifications = [];
-        if (!empty($request->spec_keys) && !empty($request->spec_values)) {
+        if (! empty($request->spec_keys) && ! empty($request->spec_values)) {
             foreach ($request->spec_keys as $index => $key) {
-                if (!empty($key) && isset($request->spec_values[$index])) {
+                if (! empty($key) && isset($request->spec_values[$index])) {
                     $specifications[$key] = $request->spec_values[$index];
                 }
             }
@@ -99,7 +102,17 @@ class ProductController extends Controller
             'is_active' => $request->has('is_active'),
         ]);
 
-        foreach ($request->variants as $variantData) {
+        $firstVariantImagePath = null;
+
+        foreach ($request->variants as $index => $variantData) {
+            $variantImagePath = null;
+            if ($request->hasFile("variants.{$index}.image")) {
+                $variantImagePath = $request->file("variants.{$index}.image")->store('variants', 'public');
+                if (! $firstVariantImagePath) {
+                    $firstVariantImagePath = $variantImagePath;
+                }
+            }
+
             $product->variants()->create([
                 'sku' => $variantData['sku'],
                 'name' => $variantData['name'],
@@ -107,15 +120,24 @@ class ProductController extends Controller
                 'color_code' => $variantData['color_code'] ?? null,
                 'size' => $variantData['size'] ?? null,
                 'price' => $variantData['price'],
-                'discount_price' => !empty($variantData['discount_price']) ? $variantData['discount_price'] : null,
+                'discount_price' => ! empty($variantData['discount_price']) ? $variantData['discount_price'] : null,
                 'stock' => $variantData['stock'],
-                'weight' => !empty($variantData['weight']) ? $variantData['weight'] : $product->weight,
+                'weight' => ! empty($variantData['weight']) ? $variantData['weight'] : $product->weight,
+                'image' => $variantImagePath,
                 'is_active' => true,
             ]);
         }
 
+        if ($firstVariantImagePath) {
+            $product->images()->create([
+                'image_path' => $firstVariantImagePath,
+                'is_primary' => true,
+                'sort_order' => 1,
+            ]);
+        }
+
         return redirect()->route('admin.products.index')
-            ->with('success', 'Produk pewarna rambut dan varian warnanya berhasil disimpan.');
+            ->with('success', 'Produk dan varian berhasil disimpan.');
     }
 
     public function edit(Product $product)
@@ -131,7 +153,7 @@ class ProductController extends Controller
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:products,slug,' . $product->id,
+            'slug' => 'nullable|string|max:255|unique:products,slug,'.$product->id,
             'summary' => 'nullable|string',
             'description' => 'nullable|string',
             'care_instructions' => 'nullable|string',
@@ -154,6 +176,7 @@ class ProductController extends Controller
             'variants.*.discount_price' => 'nullable|numeric|min:0',
             'variants.*.stock' => 'required|integer|min:0',
             'variants.*.weight' => 'nullable|integer|min:1',
+            'variants.*.image' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
         ]);
 
         if (empty($validated['slug'])) {
@@ -161,9 +184,9 @@ class ProductController extends Controller
         }
 
         $specifications = [];
-        if (!empty($request->spec_keys) && !empty($request->spec_values)) {
+        if (! empty($request->spec_keys) && ! empty($request->spec_values)) {
             foreach ($request->spec_keys as $index => $key) {
-                if (!empty($key) && isset($request->spec_values[$index])) {
+                if (! empty($key) && isset($request->spec_values[$index])) {
                     $specifications[$key] = $request->spec_values[$index];
                 }
             }
@@ -188,7 +211,7 @@ class ProductController extends Controller
 
         $existingVariantIds = [];
 
-        foreach ($request->variants as $variantData) {
+        foreach ($request->variants as $index => $variantData) {
             $variantId = $variantData['id'] ?? null;
 
             $data = [
@@ -198,32 +221,77 @@ class ProductController extends Controller
                 'color_code' => $variantData['color_code'] ?? null,
                 'size' => $variantData['size'] ?? null,
                 'price' => $variantData['price'],
-                'discount_price' => !empty($variantData['discount_price']) ? $variantData['discount_price'] : null,
+                'discount_price' => ! empty($variantData['discount_price']) ? $variantData['discount_price'] : null,
                 'stock' => $variantData['stock'],
-                'weight' => !empty($variantData['weight']) ? $variantData['weight'] : $product->weight,
+                'weight' => ! empty($variantData['weight']) ? $variantData['weight'] : $product->weight,
                 'is_active' => true,
             ];
 
             if ($variantId) {
                 $variant = ProductVariant::find($variantId);
                 if ($variant && $variant->product_id == $product->id) {
+                    if ($request->hasFile("variants.{$index}.image")) {
+                        if ($variant->image && ! str_starts_with($variant->image, 'http') && Storage::disk('public')->exists($variant->image)) {
+                            Storage::disk('public')->delete($variant->image);
+                        }
+                        $data['image'] = $request->file("variants.{$index}.image")->store('variants', 'public');
+                    } elseif (! empty($variantData['remove_image'])) {
+                        if ($variant->image && ! str_starts_with($variant->image, 'http') && Storage::disk('public')->exists($variant->image)) {
+                            Storage::disk('public')->delete($variant->image);
+                        }
+                        $data['image'] = null;
+                    }
+
                     $variant->update($data);
                     $existingVariantIds[] = $variant->id;
                 }
             } else {
+                if ($request->hasFile("variants.{$index}.image")) {
+                    $data['image'] = $request->file("variants.{$index}.image")->store('variants', 'public');
+                }
                 $newVariant = $product->variants()->create($data);
                 $existingVariantIds[] = $newVariant->id;
             }
         }
 
-        $product->variants()->whereNotIn('id', $existingVariantIds)->delete();
+        $variantsToDelete = $product->variants()->whereNotIn('id', $existingVariantIds)->get();
+        foreach ($variantsToDelete as $toDelete) {
+            if ($toDelete->image && ! str_starts_with($toDelete->image, 'http') && Storage::disk('public')->exists($toDelete->image)) {
+                Storage::disk('public')->delete($toDelete->image);
+            }
+            $toDelete->delete();
+        }
+
+        // If product has no primary image, associate the first variant image
+        if ($product->images()->count() === 0) {
+            $variantWithImage = $product->variants()->whereNotNull('image')->first();
+            if ($variantWithImage) {
+                $product->images()->create([
+                    'image_path' => $variantWithImage->image,
+                    'is_primary' => true,
+                    'sort_order' => 1,
+                ]);
+            }
+        }
 
         return redirect()->route('admin.products.index')
-            ->with('success', 'Produk dan varian warna berhasil diperbarui.');
+            ->with('success', 'Produk dan varian berhasil diperbarui.');
     }
 
     public function destroy(Product $product)
     {
+        foreach ($product->variants as $variant) {
+            if ($variant->image && ! str_starts_with($variant->image, 'http') && Storage::disk('public')->exists($variant->image)) {
+                Storage::disk('public')->delete($variant->image);
+            }
+        }
+
+        foreach ($product->images as $img) {
+            if ($img->image_path && ! str_starts_with($img->image_path, 'http') && Storage::disk('public')->exists($img->image_path)) {
+                Storage::disk('public')->delete($img->image_path);
+            }
+        }
+
         $product->delete();
 
         return redirect()->route('admin.products.index')

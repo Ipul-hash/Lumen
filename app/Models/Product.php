@@ -97,7 +97,7 @@ class Product extends Model
             ->where('is_active', true)
             ->min('price');
 
-        return $minVariantPrice ? (float)$minVariantPrice : (float)$this->base_price;
+        return $minVariantPrice ? (float) $minVariantPrice : (float) $this->base_price;
     }
 
     public function getTotalStockAttribute(): int
@@ -107,6 +107,27 @@ class Product extends Model
 
     public function getFormattedPriceAttribute(): string
     {
-        return 'Rp ' . number_format($this->starting_price, 0, ',', '.');
+        return 'Rp '.number_format($this->starting_price, 0, ',', '.');
+    }
+
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if ($this->primaryImage) {
+            $path = $this->primaryImage->image_path;
+
+            return str_starts_with($path, 'http') ? $path : asset('storage/'.$path);
+        }
+
+        $variantWithImg = $this->variants->first(fn ($v) => ! empty($v->image));
+        if ($variantWithImg) {
+            return $variantWithImg->image_url;
+        }
+
+        return null;
+    }
+
+    public function getPrimaryImageUrlAttribute(): ?string
+    {
+        return $this->thumbnail_url;
     }
 }

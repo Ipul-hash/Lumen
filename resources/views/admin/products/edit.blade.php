@@ -31,7 +31,7 @@
 <div id="kt_app_content" class="app-content flex-column-fluid">
     <div id="kt_app_content_container" class="app-container container-fluid">
 
-        <form action="{{ route('admin.products.update', $product) }}" method="POST">
+        <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -72,8 +72,8 @@
                     <div class="card card-flush mb-5">
                         <div class="card-header pt-7 d-flex justify-content-between align-items-center">
                             <div>
-                                <h3 class="card-title fw-bold text-gray-900 m-0">Varian Warna & Ukuran</h3>
-                                <div class="text-muted fs-8">Perbarui data varian, warna swatch, dan stok</div>
+                                <h3 class="card-title fw-bold text-gray-900 m-0">Varian Produk & Foto</h3>
+                                <div class="text-muted fs-8">Perbarui data varian, warna swatch, stok, dan foto khusus untuk tiap varian</div>
                             </div>
                             <button type="button" class="btn btn-sm btn-light-primary fw-bold" id="btn-add-variant">
                                 <i class="ki-duotone ki-plus fs-6 me-1"></i> Tambah Varian
@@ -89,7 +89,7 @@
                                     </button>
                                     <div class="row g-3">
                                         <div class="col-md-4">
-                                            <label class="required fs-8 fw-semibold mb-1">Nama Varian Warna</label>
+                                            <label class="required fs-8 fw-semibold mb-1">Nama Varian</label>
                                             <input type="text" name="variants[{{ $index }}][name]" class="form-control form-control-sm form-control-solid" value="{{ $variant->name }}" required />
                                         </div>
                                         <div class="col-md-3">
@@ -97,11 +97,11 @@
                                             <input type="text" name="variants[{{ $index }}][sku]" class="form-control form-control-sm form-control-solid" value="{{ $variant->sku }}" required />
                                         </div>
                                         <div class="col-md-3">
-                                            <label class="fs-8 fw-semibold mb-1">Nama Warna</label>
+                                            <label class="fs-8 fw-semibold mb-1">Nama Warna / Varian</label>
                                             <input type="text" name="variants[{{ $index }}][color_name]" class="form-control form-control-sm form-control-solid" value="{{ $variant->color_name }}" />
                                         </div>
                                         <div class="col-md-2">
-                                            <label class="fs-8 fw-semibold mb-1">Warna (Hex)</label>
+                                            <label class="fs-8 fw-semibold mb-1">Warna / Tema (Hex)</label>
                                             <div class="d-flex align-items-center gap-2">
                                                 <input type="color" name="variants[{{ $index }}][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="{{ $variant->color_code ?? '#222222' }}" />
                                             </div>
@@ -122,6 +122,35 @@
                                         <div class="col-md-3">
                                             <label class="required fs-8 fw-semibold mb-1">Stok Tersedia</label>
                                             <input type="number" name="variants[{{ $index }}][stock]" class="form-control form-control-sm form-control-solid" value="{{ $variant->stock }}" required />
+                                        </div>
+
+                                        <div class="col-12 mt-2 pt-2 border-top border-gray-300">
+                                            <div class="row align-items-center g-2">
+                                                <div class="col-auto">
+                                                    <div class="variant-img-preview border rounded bg-white d-flex align-items-center justify-content-center overflow-hidden shadow-sm" style="width: 52px; height: 52px;">
+                                                        @if($variant->image)
+                                                            <img src="{{ $variant->image_url }}" class="w-100 h-100 preview-img" style="object-fit: cover;" alt="{{ $variant->name }}">
+                                                            <i class="ki-duotone ki-picture fs-2 text-muted placeholder-icon d-none"><span class="path1"></span><span class="path2"></span></i>
+                                                        @else
+                                                            <img src="" class="d-none w-100 h-100 preview-img" style="object-fit: cover;" alt="Preview">
+                                                            <i class="ki-duotone ki-picture fs-2 text-muted placeholder-icon"><span class="path1"></span><span class="path2"></span></i>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <label class="fs-8 fw-semibold mb-1 d-block text-gray-700">Foto Khusus Varian</label>
+                                                    <input type="file" name="variants[{{ $index }}][image]" class="form-control form-control-sm form-control-solid variant-file-input" accept="image/jpeg,image/png,image/jpg,image/webp,image/gif" />
+                                                    <div class="d-flex align-items-center justify-content-between mt-1">
+                                                        <span class="text-muted fs-9">Upload file baru untuk mengganti foto (JPG, PNG, WEBP max 5MB)</span>
+                                                        @if($variant->image)
+                                                            <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                                                <input class="form-check-input" type="checkbox" name="variants[{{ $index }}][remove_image]" value="1" />
+                                                                <span class="form-check-label fs-9 text-danger fw-semibold">Hapus Foto</span>
+                                                            </label>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -224,30 +253,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 </button>
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <label class="required fs-8 fw-semibold mb-1">Nama Varian Warna</label>
-                        <input type="text" name="variants[${variantIndex}][name]" class="form-control form-control-sm form-control-solid" placeholder="Contoh: Pastel Lilac" required />
+                        <label class="required fs-8 fw-semibold mb-1">Nama Varian</label>
+                        <input type="text" name="variants[${variantIndex}][name]" class="form-control form-control-sm form-control-solid" placeholder="Contoh: Travel Spray 30ml" required />
                     </div>
                     <div class="col-md-3">
                         <label class="required fs-8 fw-semibold mb-1">SKU Unik</label>
                         <input type="text" name="variants[${variantIndex}][sku]" class="form-control form-control-sm form-control-solid" placeholder="LMN-VAR-${variantIndex}" required />
                     </div>
                     <div class="col-md-3">
-                        <label class="fs-8 fw-semibold mb-1">Nama Warna</label>
-                        <input type="text" name="variants[${variantIndex}][color_name]" class="form-control form-control-sm form-control-solid" placeholder="Lilac" />
+                        <label class="fs-8 fw-semibold mb-1">Nama Warna / Varian</label>
+                        <input type="text" name="variants[${variantIndex}][color_name]" class="form-control form-control-sm form-control-solid" placeholder="Warm Amber" />
                     </div>
                     <div class="col-md-2">
-                        <label class="fs-8 fw-semibold mb-1">Warna (Hex)</label>
+                        <label class="fs-8 fw-semibold mb-1">Warna / Tema (Hex)</label>
                         <div class="d-flex align-items-center gap-2">
-                            <input type="color" name="variants[${variantIndex}][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="#C8B6FF" />
+                            <input type="color" name="variants[${variantIndex}][color_code]" class="form-control form-control-sm form-control-color p-0 border-0" value="#D4AF37" />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <label class="fs-8 fw-semibold mb-1">Ukuran / Volume</label>
-                        <input type="text" name="variants[${variantIndex}][size]" class="form-control form-control-sm form-control-solid" placeholder="120ml" value="120ml" />
+                        <input type="text" name="variants[${variantIndex}][size]" class="form-control form-control-sm form-control-solid" placeholder="30ml" value="30ml" />
                     </div>
                     <div class="col-md-3">
                         <label class="required fs-8 fw-semibold mb-1">Harga (Rp)</label>
-                        <input type="number" name="variants[${variantIndex}][price]" class="form-control form-control-sm form-control-solid" placeholder="125000" value="125000" required />
+                        <input type="number" name="variants[${variantIndex}][price]" class="form-control form-control-sm form-control-solid" placeholder="195000" value="195000" required />
                     </div>
                     <div class="col-md-3">
                         <label class="fs-8 fw-semibold mb-1">Harga Coret (Promo)</label>
@@ -256,6 +285,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="col-md-3">
                         <label class="required fs-8 fw-semibold mb-1">Stok Tersedia</label>
                         <input type="number" name="variants[${variantIndex}][stock]" class="form-control form-control-sm form-control-solid" placeholder="20" value="20" required />
+                    </div>
+
+                    <div class="col-12 mt-2 pt-2 border-top border-gray-300">
+                        <div class="row align-items-center g-2">
+                            <div class="col-auto">
+                                <div class="variant-img-preview border rounded bg-white d-flex align-items-center justify-content-center overflow-hidden shadow-sm" style="width: 52px; height: 52px;">
+                                    <i class="ki-duotone ki-picture fs-2 text-muted placeholder-icon"><span class="path1"></span><span class="path2"></span></i>
+                                    <img src="" class="d-none w-100 h-100 preview-img" style="object-fit: cover;" alt="Preview">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label class="fs-8 fw-semibold mb-1 d-block text-gray-700">Foto Khusus Varian</label>
+                                <input type="file" name="variants[${variantIndex}][image]" class="form-control form-control-sm form-control-solid variant-file-input" accept="image/jpeg,image/png,image/jpg,image/webp,image/gif" />
+                                <div class="text-muted fs-9 mt-1">Upload foto khusus varian ini (JPG, PNG, WEBP max 5MB)</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -271,6 +316,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.remove();
             } else {
                 window.showToast('warning', 'Minimal harus ada 1 varian produk.');
+            }
+        }
+    });
+
+    document.addEventListener('change', function (e) {
+        if (e.target && e.target.classList.contains('variant-file-input')) {
+            const file = e.target.files[0];
+            const item = e.target.closest('.variant-item');
+            if (!item) return;
+            const previewImg = item.querySelector('.preview-img');
+            const placeholderIcon = item.querySelector('.placeholder-icon');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (evt) {
+                    if (previewImg) {
+                        previewImg.src = evt.target.result;
+                        previewImg.classList.remove('d-none');
+                    }
+                    if (placeholderIcon) {
+                        placeholderIcon.classList.add('d-none');
+                    }
+                };
+                reader.readAsDataURL(file);
             }
         }
     });

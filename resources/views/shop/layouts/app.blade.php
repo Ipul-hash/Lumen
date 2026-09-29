@@ -969,7 +969,7 @@ window.addToCart = function(variantId, quantity = 1) {
     });
 };
 
-window.switchCardVariant = function(productId, variantId, colorName, colorCode, formattedPrice, stock, clickedBtn) {
+window.switchCardVariant = function(productId, variantId, colorName, colorCode, formattedPrice, stock, clickedBtn, imageUrl) {
     if (!clickedBtn) return;
     const card = clickedBtn.closest('.product-card');
     if (!card) return;
@@ -979,8 +979,24 @@ window.switchCardVariant = function(productId, variantId, colorName, colorCode, 
     });
     clickedBtn.classList.add('active');
 
+    const cardImg = document.getElementById('cardImg_' + productId);
     const placeholder = document.getElementById('cardPlaceholder_' + productId);
-    if (placeholder && colorCode) {
+    const wrapper = document.getElementById('cardImgWrapper_' + productId);
+
+    if (imageUrl) {
+        if (cardImg) {
+            cardImg.src = imageUrl;
+            cardImg.style.display = 'block';
+        } else if (wrapper) {
+            const newImg = document.createElement('img');
+            newImg.id = 'cardImg_' + productId;
+            newImg.src = imageUrl;
+            wrapper.appendChild(newImg);
+        }
+        if (placeholder) {
+            placeholder.style.display = 'none';
+        }
+    } else if (placeholder && colorCode) {
         placeholder.style.background = 'linear-gradient(180deg, ' + colorCode + ' 0%, #171717 100%)';
     }
 

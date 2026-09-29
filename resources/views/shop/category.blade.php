@@ -55,8 +55,8 @@
                 <div class="col-6 col-md-4 oxva-reveal delay-{{ $staggerDelay }}">
                     <div class="product-card">
                         <div class="img-wrapper" id="cardImgWrapper_{{ $product->id }}">
-                            @if($product->primaryImage)
-                                <img id="cardImg_{{ $product->id }}" src="{{ str_starts_with($product->primaryImage->image_path, 'http') ? $product->primaryImage->image_path : asset('storage/' . $product->primaryImage->image_path) }}" alt="{{ $product->name }}">
+                            @if($product->thumbnail_url)
+                                <img id="cardImg_{{ $product->id }}" src="{{ $product->thumbnail_url }}" alt="{{ $product->name }}">
                             @else
                                 <div class="w-100 h-100 d-flex align-items-center justify-content-center text-center p-3 card-gradient-preview" id="cardPlaceholder_{{ $product->id }}" style="background: {{ $hasColorCode ? 'linear-gradient(180deg, ' . $firstVariant->color_code . ' 0%, #171717 100%)' : '#f0f0f4' }}; color: {{ $hasColorCode ? '#fff' : '#111' }};">
                                     <div>
@@ -71,8 +71,8 @@
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <div class="d-flex align-items-center gap-1">
                                     @foreach($product->activeVariants->take(5) as $vIndex => $v)
-                                        @if($v->color_code)
-                                            <button type="button" class="swatch-circle-btn {{ $vIndex === 0 ? 'active' : '' }}" style="background-color: {{ $v->color_code }};" title="{{ $v->color_name ?? $v->name }}" onclick="window.switchCardVariant({{ $product->id }}, {{ $v->id }}, '{{ addslashes($v->color_name ?? $v->name) }}', '{{ $v->color_code }}', '{{ $v->formatted_price }}', {{ $v->stock }}, this)" aria-label="{{ $v->color_name ?? $v->name }}"></button>
+                                        @if($v->image_url || $v->color_code)
+                                            <button type="button" class="swatch-circle-btn {{ $vIndex === 0 ? 'active' : '' }}" style="{{ $v->image_url ? 'background-image: url(' . $v->image_url . '); background-size: cover;' : ('background-color: ' . ($v->color_code ?? '#444') . ';') }}" title="{{ $v->color_name ?? $v->name }}" onclick="window.switchCardVariant({{ $product->id }}, {{ $v->id }}, '{{ addslashes($v->color_name ?? $v->name) }}', '{{ $v->color_code }}', '{{ $v->formatted_price }}', {{ $v->stock }}, this, '{{ $v->image_url ?? '' }}')" aria-label="{{ $v->color_name ?? $v->name }}"></button>
                                         @endif
                                     @endforeach
                                     @if($product->activeVariants->count() > 5)

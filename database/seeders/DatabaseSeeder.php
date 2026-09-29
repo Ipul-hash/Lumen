@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\ProductImage;
 use App\Models\ProductVariant;
 use App\Models\Shipment;
 use App\Models\StoreSetting;
@@ -90,7 +89,9 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        if (Category::count() > 0) {
+        $this->call(PerfumeSeeder::class);
+
+        if (Category::where('slug', 'semi-permanent-hair-dye')->exists()) {
             return;
         }
 
