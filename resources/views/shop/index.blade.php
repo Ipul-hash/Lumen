@@ -2,6 +2,17 @@
 
 @section('title', 'LUMEN Hair Color Atelier | Pewarna Rambut Formulasi Salon')
 
+@push('styles')
+<style>
+    .perfume-bottle-hover {
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero-feature-card:hover .perfume-bottle-hover {
+        transform: scale(1.05) translateY(-3px);
+    }
+</style>
+@endpush
+
 @section('content')
 <section class="position-relative bg-dark text-white py-5 overflow-hidden" style="background: linear-gradient(135deg, #09090d 0%, #15141d 50%, #060608 100%); min-height: 560px; display: flex; align-items: center;">
     <div class="container-fluid px-lg-5 position-relative" style="z-index: 1;">
@@ -96,6 +107,81 @@
                         <div class="fw-bold fs-7 text-uppercase text-dark tracking-wide">QRIS & VA Midtrans</div>
                         <div class="fs-8 text-muted mt-1">Konfirmasi transaksi instan real-time</div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="position-relative text-white py-5 overflow-hidden" id="koleksi-parfum" style="background: linear-gradient(135deg, #090807 0%, #15110d 50%, #060504 100%); min-height: 560px; display: flex; align-items: center; border-top: 1px solid rgba(212, 175, 55, 0.15); border-bottom: 1px solid rgba(212, 175, 55, 0.15);">
+    <div class="container-fluid px-lg-5 position-relative" style="z-index: 1;">
+        <div class="row align-items-center g-5">
+            <!-- Left Column: Perfume Design / Featured Card (Desk: Left / Mob: 2nd) -->
+            <div class="col-lg-5 text-center order-2 order-lg-1">
+                <div class="position-relative d-inline-block oxva-reveal oxva-reveal-scale delay-2">
+                    <div class="hero-ambient-glow" style="background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(180, 83, 9, 0.16) 45%, transparent 70%);"></div>
+                    <div class="hero-feature-card text-start" style="width: 360px; max-width: 100%; border: 1px solid rgba(212, 175, 55, 0.28); background: rgba(18, 16, 14, 0.85);">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <span class="text-uppercase tracking-widest fs-8 fw-bold" style="color: #d4af37;">Scent of the Season</span>
+                            <span class="badge rounded-pill" style="background: rgba(212,175,55,0.18); color: #f5d77f; border: 1px solid rgba(212,175,55,0.35); font-size: 0.65rem; letter-spacing: 0.05em; padding: 4px 10px;">35% EXTRAIT</span>
+                        </div>
+
+                        <div class="position-relative rounded-3 mb-3 overflow-hidden text-center p-3" style="background: radial-gradient(circle, #25201b 0%, #110f0d 100%); border: 1px solid rgba(212,175,55,0.15); min-height: 185px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <img src="{{ asset('storage/variants/santal_blanc_50.jpg') }}" alt="Santal Blanc & Amber Flacon" style="max-height: 140px; width: auto; object-fit: contain; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.7)); transition: transform 0.4s ease;" class="perfume-bottle-hover">
+                            <div class="mt-2 text-center">
+                                <span class="fs-8 fw-semibold" style="color: #e6ca65; letter-spacing: 0.03em;">Signature Flacon 50ml</span>
+                                <span class="fs-8 text-white-50 d-block" style="font-size: 0.72rem !important;">Italian Cardamom &bull; Mysore Sandalwood &bull; Ambergris</span>
+                            </div>
+                        </div>
+
+                        <h3 class="text-white font-serif mb-1 fs-4">Santal Blanc & Amber</h3>
+                        <p class="fs-8 text-white-50 mb-3">Extrait de Parfum konsentrasi 35% dengan aroma creamy sandalwood Mysore dan hangatnya golden ambergris. Ketahanan 14+ jam.</p>
+
+                        <div class="d-flex align-items-center justify-content-between mb-3 p-2 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="swatch-circle" style="background-color: #D4AF37; width:22px; height:22px; border: 1px solid rgba(255,255,255,0.3);" title="Golden Amber"></span>
+                                <span class="swatch-circle" style="background-color: #C49A6C; width:22px; height:22px; border: 1px solid rgba(255,255,255,0.3);" title="Warm Sandalwood"></span>
+                                <span class="swatch-circle" style="background-color: #8B5A2B; width:22px; height:22px; border: 1px solid rgba(255,255,255,0.3);" title="Royal Ambergris"></span>
+                                <span class="fs-8 text-white-50 ms-1">3 Ukuran Flacon</span>
+                            </div>
+                            <span class="fs-8 fw-bold" style="color: #f5d77f;">Mulai Rp 195rb</span>
+                        </div>
+
+                        <a href="{{ route('shop.show', 'lumen-extrait-de-parfum-santal-blanc-amber') }}" class="btn btn-outline-light rounded-pill w-100 py-2 fs-8 fw-bold" style="border-color: rgba(212,175,55,0.45); color: #fbf7ee;">
+                            Lihat Detail Varian Aroma <i class="bi bi-chevron-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Headline, Copy, CTAs, Badges (Desk: Right / Mob: 1st) -->
+            <div class="col-lg-7 oxva-reveal ps-lg-5 order-1 order-lg-2">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(212, 175, 55, 0.12); border: 1px solid rgba(212, 175, 55, 0.28);">
+                    <i class="bi bi-stars" style="color: #d4af37; font-size: 0.85rem;"></i>
+                    <span class="text-uppercase tracking-wider fw-bold fs-8" style="color: #f5d77f;">LUMEN Haute Parfumerie & Essence</span>
+                </div>
+                <h2 class="display-3 fw-bold text-white mb-3 font-serif" style="letter-spacing: -0.02em; line-height: 1.1;">
+                    THE ART OF <span style="background: linear-gradient(135deg, #fce8a6 0%, #d4af37 50%, #c49a6c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PURE ESSENCE.</span>
+                </h2>
+                <p class="lead text-light mb-4 fs-6 pe-lg-5" style="opacity: 0.88; max-width: 600px; line-height: 1.65;">
+                    Koleksi wewangian mewah Extrait de Parfum dan Hair & Body Mist dengan konsentrat minyak wangi murni Prancis hingga 35%. Menghadirkan jejak aroma woody, floral, dan amber yang memikat, tahan hingga 14+ jam di kulit serta aman tanpa membuat rambut menjadi kering.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ route('shop.category', 'parfum-fragrance') }}" class="oxva-btn-primary" style="background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%); color: #0b0a08; border: none; font-weight: 700;">
+                        Jelajahi Koleksi Parfum <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="{{ route('shop.show', 'lumen-hair-body-fragrance-mist-100ml') }}" class="oxva-btn-outline" style="border-color: rgba(212,175,55,0.45); color: #fbf7ee;">
+                        Hair & Body Mist
+                    </a>
+                    <a href="{{ route('shop.show', 'lumen-extrait-de-parfum-velvet-rose-smoked-oud') }}" class="btn btn-sm btn-link text-white-50 text-decoration-none d-flex align-items-center gap-1 fs-8">
+                        Velvet Rose & Smoked Oud <i class="bi bi-arrow-up-right"></i>
+                    </a>
+                </div>
+                <div class="mt-4 pt-3 d-flex flex-wrap align-items-center gap-4 fs-8 text-white-50">
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2" style="color: #d4af37;"></i> 35% Pure Extrait Oil</span>
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2" style="color: #d4af37;"></i> 14+ Jam Longevity</span>
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2" style="color: #d4af37;"></i> Non-Drying Safe Mist</span>
+                    <span class="d-inline-flex align-items-center gap-2"><i class="bi bi-check2" style="color: #d4af37;"></i> BPOM Certified</span>
                 </div>
             </div>
         </div>

@@ -644,6 +644,7 @@
                     <nav class="d-none d-lg-flex flex-row align-items-center navbar-nav ms-3 ms-xl-4 gap-1">
                         <a href="{{ route('shop.index') }}" class="nav-link">Beranda</a>
                         <a href="{{ route('shop.category', 'semi-permanent-hair-dye') }}" class="nav-link">Koleksi Warna</a>
+                        <a href="{{ route('shop.category', 'parfum-fragrance') }}" class="nav-link">Parfum</a>
                         <a href="{{ route('shop.category', 'bleaching-developers') }}" class="nav-link">Bleach & Developers</a>
                         <a href="{{ route('shop.category', 'color-care-treatment') }}" class="nav-link">Color Care</a>
                         <a href="{{ route('shop.shadeGuide') }}" class="nav-link">Panduan Shade</a>
@@ -681,6 +682,7 @@
         <div class="list-group list-group-flush">
             <a href="{{ route('shop.index') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Beranda</a>
             <a href="{{ route('shop.category', 'semi-permanent-hair-dye') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Koleksi Warna</a>
+            <a href="{{ route('shop.category', 'parfum-fragrance') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Parfum & Fragrance</a>
             <a href="{{ route('shop.category', 'bleaching-developers') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Bleach & Developers</a>
             <a href="{{ route('shop.category', 'color-care-treatment') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Color Care</a>
             <a href="{{ route('shop.shadeGuide') }}" class="list-group-item list-group-item-action py-3 px-4 fw-bold fs-7 text-uppercase tracking-wider">Panduan Shade</a>
@@ -784,6 +786,7 @@
                 <h6 class="text-white text-uppercase fs-7 fw-bold mb-3 tracking-wide">Koleksi</h6>
                 <ul class="list-unstyled fs-7 d-flex flex-column gap-2">
                     <li><a href="{{ route('shop.category', 'semi-permanent-hair-dye') }}">Ash & Cool Tones</a></li>
+                    <li><a href="{{ route('shop.category', 'parfum-fragrance') }}">Parfum & Haute Fragrance</a></li>
                     <li><a href="{{ route('shop.category', 'bleaching-developers') }}">Bleach & Developers</a></li>
                     <li><a href="{{ route('shop.category', 'color-care-treatment') }}">Purple Shampoo & Care</a></li>
                     <li><a href="{{ route('shop.shadeGuide') }}">Panduan Level Warna</a></li>
