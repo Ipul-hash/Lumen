@@ -5,10 +5,17 @@
 @push('styles')
 <style>
     .perfume-bottle-hover {
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .hero-feature-card:hover .perfume-bottle-hover {
-        transform: scale(1.05) translateY(-3px);
+    .perfume-full-card:hover .perfume-bottle-hover {
+        transform: scale(1.05);
+    }
+    .perfume-full-card {
+        transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease;
+    }
+    .perfume-full-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.85), 0 0 35px rgba(212, 175, 55, 0.25) !important;
     }
 </style>
 @endpush
@@ -116,50 +123,29 @@
 <section class="position-relative text-white py-5 overflow-hidden" id="koleksi-parfum" style="background: linear-gradient(135deg, #090807 0%, #15110d 50%, #060504 100%); min-height: 560px; display: flex; align-items: center; border-top: 1px solid rgba(212, 175, 55, 0.15); border-bottom: 1px solid rgba(212, 175, 55, 0.15);">
     <div class="container-fluid px-lg-5 position-relative" style="z-index: 1;">
         <div class="row align-items-center g-5">
-            <!-- Left Column: Perfume Design / Featured Card (Desk: Left / Mob: 2nd) -->
+            <!-- Left Column: Perfume Full Image Showcase (Desk: Left / Mob: 2nd) -->
             <div class="col-lg-5 text-center order-2 order-lg-1">
                 <div class="position-relative d-inline-block oxva-reveal oxva-reveal-scale delay-2">
-                    <div class="hero-ambient-glow" style="background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, rgba(180, 83, 9, 0.16) 45%, transparent 70%);"></div>
-                    <div class="hero-feature-card text-start" style="width: 360px; max-width: 100%; border: 1px solid rgba(212, 175, 55, 0.28); background: rgba(18, 16, 14, 0.85);">
-                        <div class="d-flex align-items-center justify-content-between mb-3">
-                            <span class="text-uppercase tracking-widest fs-8 fw-bold" style="color: #d4af37;">Scent of the Season</span>
-                            <span class="badge rounded-pill" style="background: rgba(212,175,55,0.18); color: #f5d77f; border: 1px solid rgba(212,175,55,0.35); font-size: 0.65rem; letter-spacing: 0.05em; padding: 4px 10px;">35% EXTRAIT</span>
-                        </div>
-
-                        <div class="position-relative rounded-3 mb-3 overflow-hidden text-center p-3" style="background: radial-gradient(circle, #25201b 0%, #110f0d 100%); border: 1px solid rgba(212,175,55,0.15); min-height: 185px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                            <img src="{{ asset('storage/variants/santal_blanc_50.jpg') }}" alt="Santal Blanc & Amber Flacon" style="max-height: 140px; width: auto; object-fit: contain; filter: drop-shadow(0 12px 24px rgba(0,0,0,0.7)); transition: transform 0.4s ease;" class="perfume-bottle-hover">
-                            <div class="mt-2 text-center">
-                                <span class="fs-8 fw-semibold" style="color: #e6ca65; letter-spacing: 0.03em;">Signature Flacon 50ml</span>
-                                <span class="fs-8 text-white-50 d-block" style="font-size: 0.72rem !important;">Italian Cardamom &bull; Mysore Sandalwood &bull; Ambergris</span>
+                    <div class="hero-ambient-glow" style="background: radial-gradient(circle, rgba(212, 175, 55, 0.32) 0%, rgba(180, 83, 9, 0.16) 45%, transparent 70%); width: 440px; height: 440px;"></div>
+                    <a href="{{ route('shop.show', 'lumen-extrait-de-parfum-santal-blanc-amber') }}" class="d-block text-decoration-none position-relative" style="z-index: 1;">
+                        <div class="perfume-full-card position-relative overflow-hidden" style="width: 370px; max-width: 100%; border-radius: 26px; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 175, 55, 0.15); background: #12100e;">
+                            <img src="{{ asset('storage/variants/santal_blanc_50.jpg') }}" alt="LUMEN Extrait de Parfum - Santal Blanc & Amber" style="width: 100%; height: 480px; object-fit: cover; display: block;" class="perfume-bottle-hover">
+                            <div class="position-absolute bottom-0 start-0 w-100 p-4 text-start" style="background: linear-gradient(180deg, transparent 0%, rgba(8, 7, 6, 0.65) 40%, rgba(6, 5, 4, 0.95) 100%);">
+                                <h3 class="text-white font-serif mb-1 fs-4">Santal Blanc & Amber</h3>
+                                <div class="d-flex align-items-center justify-content-between mt-2">
+                                    <span class="fs-7 fw-semibold" style="color: #f5d77f;">Extrait de Parfum &bull; Rp 195.000</span>
+                                    <span class="btn btn-sm btn-outline-light rounded-pill px-3 py-1 fs-8 fw-bold" style="border-color: rgba(212,175,55,0.5); color: #fbf7ee;">
+                                        Lihat Detail <i class="bi bi-chevron-right ms-1"></i>
+                                    </span>
+                                </div>
                             </div>
                         </div>
-
-                        <h3 class="text-white font-serif mb-1 fs-4">Santal Blanc & Amber</h3>
-                        <p class="fs-8 text-white-50 mb-3">Extrait de Parfum konsentrasi 35% dengan aroma creamy sandalwood Mysore dan hangatnya golden ambergris. Ketahanan 14+ jam.</p>
-
-                        <div class="d-flex align-items-center justify-content-between mb-3 p-2 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="swatch-circle" style="background-color: #D4AF37; width:22px; height:22px; border: 1px solid rgba(255,255,255,0.3);" title="Golden Amber"></span>
-                                <span class="swatch-circle" style="background-color: #C49A6C; width:22px; height:22px; border: 1px solid rgba(255,255,255,0.3);" title="Warm Sandalwood"></span>
-                                <span class="swatch-circle" style="background-color: #8B5A2B; width:22px; height:22px; border: 1px solid rgba(255,255,255,0.3);" title="Royal Ambergris"></span>
-                                <span class="fs-8 text-white-50 ms-1">3 Ukuran Flacon</span>
-                            </div>
-                            <span class="fs-8 fw-bold" style="color: #f5d77f;">Mulai Rp 195rb</span>
-                        </div>
-
-                        <a href="{{ route('shop.show', 'lumen-extrait-de-parfum-santal-blanc-amber') }}" class="btn btn-outline-light rounded-pill w-100 py-2 fs-8 fw-bold" style="border-color: rgba(212,175,55,0.45); color: #fbf7ee;">
-                            Lihat Detail Varian Aroma <i class="bi bi-chevron-right ms-1"></i>
-                        </a>
-                    </div>
+                    </a>
                 </div>
             </div>
 
-            <!-- Right Column: Headline, Copy, CTAs, Badges (Desk: Right / Mob: 1st) -->
+            <!-- Right Column: Headline, Copy, CTAs (Desk: Right / Mob: 1st) -->
             <div class="col-lg-7 oxva-reveal ps-lg-5 order-1 order-lg-2">
-                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(212, 175, 55, 0.12); border: 1px solid rgba(212, 175, 55, 0.28);">
-                    <i class="bi bi-stars" style="color: #d4af37; font-size: 0.85rem;"></i>
-                    <span class="text-uppercase tracking-wider fw-bold fs-8" style="color: #f5d77f;">LUMEN Haute Parfumerie & Essence</span>
-                </div>
                 <h2 class="display-3 fw-bold text-white mb-3 font-serif" style="letter-spacing: -0.02em; line-height: 1.1;">
                     THE ART OF <span style="background: linear-gradient(135deg, #fce8a6 0%, #d4af37 50%, #c49a6c 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PURE ESSENCE.</span>
                 </h2>
