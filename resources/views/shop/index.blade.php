@@ -17,6 +17,13 @@
         transform: translateY(-6px);
         box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.85), 0 0 35px rgba(212, 175, 55, 0.25) !important;
     }
+    .hero-smoke-card .hero-smoke-bg {
+        transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+    .hero-smoke-card:hover .hero-smoke-bg {
+        transform: scale(1.08) rotate(1deg);
+        opacity: 0.85;
+    }
 </style>
 @endpush
 
@@ -47,21 +54,27 @@
             </div>
             <div class="col-lg-5 text-center">
                 <div class="position-relative d-inline-block oxva-reveal oxva-reveal-scale delay-2">
-                    <div class="hero-ambient-glow"></div>
-                    <div class="hero-feature-card text-start" style="width: 340px; max-width: 100%;">
-                        <div class="mb-3">
-                            <span class="text-uppercase tracking-widest text-white-50 fs-8 fw-bold">Color of the Season</span>
+                    <div class="hero-ambient-glow" style="background: radial-gradient(circle, rgba(160, 170, 190, 0.28) 0%, rgba(90, 100, 120, 0.15) 45%, transparent 70%);"></div>
+                    <div class="hero-feature-card hero-smoke-card text-start position-relative overflow-hidden" style="width: 340px; max-width: 100%; border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.75), 0 0 30px rgba(160, 175, 195, 0.18);">
+                        <!-- Ethereal Smoke Background Layer -->
+                        <div class="position-absolute top-0 start-0 w-100 h-100 hero-smoke-bg" style="background: url('{{ asset('images/nordic-ash-smoke.jpg') }}') center/cover no-repeat; opacity: 0.75; mix-blend-mode: screen; pointer-events: none;"></div>
+                        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(180deg, rgba(12, 12, 18, 0.55) 0%, rgba(10, 10, 15, 0.85) 100%); pointer-events: none;"></div>
+
+                        <div class="position-relative" style="z-index: 1;">
+                            <div class="mb-3">
+                                <span class="text-uppercase tracking-widest text-white-50 fs-8 fw-bold">Color of the Season</span>
+                            </div>
+                            <h3 class="text-white font-serif mb-1 fs-4">Nordic Ash Grey</h3>
+                            <p class="fs-8 text-white-50 mb-3">Formula dingin berpigmen ultra-halus untuk menetralkan pantulan kekuningan rambut Asia.</p>
+                            <div class="d-flex align-items-center gap-2 mb-4 p-2 rounded-3" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(8px);">
+                                <span class="swatch-circle" style="background-color: #8C8D91; width:26px; height:26px; border: 1px solid rgba(255,255,255,0.25);"></span>
+                                <span class="swatch-circle" style="background-color: #C0C0C0; width:26px; height:26px; border: 1px solid rgba(255,255,255,0.25);"></span>
+                                <span class="swatch-circle" style="background-color: #5C5D61; width:26px; height:26px; border: 1px solid rgba(255,255,255,0.25);"></span>
+                            </div>
+                            <a href="{{ route('shop.show', 'lumen-vivid-color-cream-120ml') }}" class="btn btn-outline-light rounded-pill w-100 py-2 fs-8 fw-bold" style="border-color: rgba(255,255,255,0.4); backdrop-filter: blur(8px);">
+                                Lihat Detail Shade Ini <i class="bi bi-chevron-right ms-1"></i>
+                            </a>
                         </div>
-                        <h3 class="text-white font-serif mb-1 fs-4">Nordic Ash Grey</h3>
-                        <p class="fs-8 text-white-50 mb-3">Formula dingin berpigmen ultra-halus untuk menetralkan pantulan kekuningan rambut Asia.</p>
-                        <div class="d-flex align-items-center gap-2 mb-4 p-2 rounded-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);">
-                            <span class="swatch-circle" style="background-color: #8C8D91; width:26px; height:26px;"></span>
-                            <span class="swatch-circle" style="background-color: #C0C0C0; width:26px; height:26px;"></span>
-                            <span class="swatch-circle" style="background-color: #5C5D61; width:26px; height:26px;"></span>
-                        </div>
-                        <a href="{{ route('shop.show', 'lumen-vivid-color-cream-120ml') }}" class="btn btn-outline-light rounded-pill w-100 py-2 fs-8 fw-bold">
-                            Lihat Detail Shade Ini <i class="bi bi-chevron-right ms-1"></i>
-                        </a>
                     </div>
                 </div>
             </div>
